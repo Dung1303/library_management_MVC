@@ -1,9 +1,11 @@
 <?php
 // app/core/Controller.php
 
-class Controller {
+class Controller
+{
 
-    protected function model($model) {
+    protected function model($model)
+    {
         $modelPath = __DIR__ . '/../models/' . $model . '.php';
 
         if (!file_exists($modelPath)) {
@@ -13,16 +15,32 @@ class Controller {
         require_once $modelPath;
         return new $model();
     }
-
-    protected function view($view, $data = []) {
+    // ... (hàm model giữ nguyên)
+    protected function view($view, $data = [])
+    {
+        // 1. Giải nén dữ liệu để dùng trong các file view
         extract($data);
 
-        $viewPath = __DIR__ . '/../views/' . $view . '.php';
+        // 2. Xác định đường dẫn các file
+        $headerPath = __DIR__ . '/../views/layouts/header.php';
+        $footerPath = __DIR__ . '/../views/layouts/footer.php';
+        $mainViewPath = __DIR__ . '/../views/' . $view . '.php';
 
-        if (!file_exists($viewPath)) {
-            die('View not found');
+        // 3. Nhúng Header
+        if (file_exists($headerPath)) {
+            require_once $headerPath;
         }
 
-        require_once $viewPath;
+        // 4. Nhúng nội dung chính (ví dụ: member/home.php)
+        if (file_exists($mainViewPath)) {
+            require_once $mainViewPath;
+        } else {
+            die("View $view not found!");
+        }
+
+        // 5. Nhúng Footer
+        if (file_exists($footerPath)) {
+            require_once $footerPath;
+        }
     }
 }
