@@ -1,10 +1,13 @@
 <?php
 // app/core/Router.php
 
-class Router {
+class Router
+{
 
-    public function run() {
-        $url = $_GET['url'] ?? '';
+    public function run()
+    {
+        // Parse từ REQUEST_URI nếu không có $_GET['url']
+        $url = $_GET['url'] ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $url = trim($url, '/');
         $parts = explode('/', $url);
 

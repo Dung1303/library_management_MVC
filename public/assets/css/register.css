@@ -1,0 +1,135 @@
+/* public/assets/css/register.css */
+/* Thiết kế trang Đăng ký - Hệ thống Quản lý Thư viện */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+.register-container {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 420px; /* Giảm max-width để giống hình hơn, hẹp hơn một chút */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 30px 30px 20px; /* Giảm padding để header ngắn hơn giống hình */
+    position: relative;
+}
+
+.logo {
+    font-size: 3rem; /* Giảm kích thước logo để giống */
+    margin-bottom: 5px;
+}
+
+.title {
+    font-size: 1.4rem; /* Giảm font size để khớp */
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.form-content {
+    padding: 30px 30px 25px; /* Tinh chỉnh padding để form gọn hơn */
+}
+
+.form-group {
+    margin-bottom: 18px; /* Giảm margin giữa các group để giống hình */
+}
+
+.label {
+    display: block;
+    margin-bottom: 6px; /* Giảm margin label */
+    font-weight: 500;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 14px; /* Giảm padding input để input mỏng hơn */
+    border: 1px solid #ddd;
+    border-radius: 6px; /* Giảm border-radius để giống */
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 1rem; /* Giảm size icon */
+}
+
+.login-link {
+    text-align: center;
+    margin: 15px 0 10px; /* Tinh chỉnh margin để link gần button hơn */
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.btn-register {
+    width: 100%;
+    padding: 14px; /* Giảm padding button để giống */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px; /* Giảm border-radius */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
