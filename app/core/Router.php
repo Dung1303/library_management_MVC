@@ -12,12 +12,12 @@ class Router
         $parts = explode('/', $url);
 
         // Mặc định
-        $controllerName = !empty($parts[0])
-            ? ucfirst($parts[0]) . 'Controller'
+        $controllerName = !empty($parts[2])
+            ? ucfirst($parts[2]) . 'Controller'
             : 'HomeController';
 
-        $method = $parts[1] ?? 'index';
-        $params = array_slice($parts, 2);
+        $method = $parts[3] ?? 'index';
+        $params = array_slice($parts, 4);
 
         $controllerPath = __DIR__ . '/../controllers/' . $controllerName . '.php';
 

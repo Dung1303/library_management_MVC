@@ -10,9 +10,9 @@ class AuthController extends Controller
         // Nếu đã login, redirect về home dựa trên role
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['role'] === 'admin') {
-                header('Location: /admin/dashboard');
+                header('Location: /library_management_system/public/admin/dashboard');
             } else {
-                header('Location: /member/home');
+                header('Location: /library_management_system/public/member/home');
             }
             exit;
         }
@@ -23,13 +23,16 @@ class AuthController extends Controller
             $password = $_POST['password'];
             $full_name = $_POST['full_name'];
             $email = $_POST['email'];
+            $confirm_password = $_POST['confirm_password'] ?? '';
 
             // Load model User
             $userModel = $this->model('User');
 
             // Validation cơ bản
-            if (empty($username) || empty($password) || empty($full_name) || empty($email)) {
+            if (empty($username) || empty($password) || empty($full_name) || empty($email) || empty($confirm_password)) {
                 $error = "All fields are required.";
+            } elseif ($password !== $confirm_password) {
+                $error = "Password and confirm password do not match.";
             } elseif ($userModel->usernameExists($username)) {
                 $error = "Username already exists.";
             } elseif ($userModel->emailExists($email)) {
@@ -38,7 +41,7 @@ class AuthController extends Controller
                 // Tạo user mới
                 if ($userModel->createUser($username, $password, $full_name, $email)) {
                     // Redirect về login sau register thành công
-                    header('Location: /auth/login?success=registered');
+                    header('Location: /library_management_system/public/auth/login?success=registered');
                     exit;
                 } else {
                     $error = "Registration failed. Please try again.";
@@ -59,40 +62,45 @@ class AuthController extends Controller
         // Nếu đã login, redirect về home dựa trên role
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['role'] === 'admin') {
-                header('Location: /admin/dashboard');
+                header('Location: /library_management_system/public/admin/dashboard');
             } else {
-                header('Location: /member/home');
+                header('Location: /library_management_system/public/member/home');
             }
             exit;
         }
 
         // Nếu form submit (POST)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
+            $username = $_POST['username'] ?? '';
+            $password = $_POST['password'] ?? '';
 
             // Load model User
             $userModel = $this->model('User');
 
-            // Lấy user
-            $user = $userModel->getUserByUsername($username);
+            // Validation cơ bản
+            if (empty($username) || empty($password)) {
+                $error = "Username and password are required.";
+            } else {
+                // Lấy user
+                $user = $userModel->getUserByUsername($username);
 
-            // Kiểm tra password
-            if ($user && password_verify($password, $user['password']) && $user['status'] === 'active') {
+                // Kiểm tra password
+                if ($user && password_verify($password, $user['password']) && $user['status'] === 'active') {
                 // Set session
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
 
-                // Redirect dựa trên role
-                if ($user['role'] === 'admin') {
-                    header('Location: /admin/dashboard');
+                    // Redirect dựa trên role
+                    if ($user['role'] === 'admin') {
+                        header('Location: /library_management_system/public/admin/dashboard');
+                    } else {
+                        header('Location: /library_management_system/public/member/home');
+                    }
+                    exit;
                 } else {
-                    header('Location: /member/home');
+                    $error = "Invalid username or password, or account is locked.";
                 }
-                exit;
-            } else {
-                $error = "Invalid username or password, or account is locked.";
             }
 
             // Truyền error về view
@@ -110,7 +118,7 @@ class AuthController extends Controller
         session_destroy();
 
         // Redirect về login
-        header('Location: /auth/login');
+        header('Location: /library_management_system/public/auth/login');
         exit;
     }
 }

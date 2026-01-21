@@ -17,12 +17,11 @@ class User extends Model
         ");
 
         // Bind params và execute
-        $stmt->bind_param("ssss", $username, $hashedPassword, $full_name, $email);
-        $result = $stmt->execute();
+        $result = $stmt->execute([$username, $hashedPassword, $full_name, $email]);
 
         if ($result) {
             // Lấy user_id mới insert
-            $user_id = $this->db->insert_id;
+            $user_id = $this->db->lastInsertId();
 
             // Insert notification cho register (như dữ liệu mẫu)
             $this->createNotification($user_id, 'register');
@@ -38,34 +37,29 @@ class User extends Model
     {
         // Chuẩn bị query select
         $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->execute([$username]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Trả về row nếu tồn tại
-        return $result->fetch_assoc();
+        return $result;
     }
 
     // Hàm kiểm tra username tồn tại chưa (cho register validation)
     public function usernameExists($username)
     {
         $stmt = $this->db->prepare("SELECT user_id FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->num_rows > 0;
+        $stmt->execute([$username]);
+        
+        return $stmt->rowCount() > 0;
     }
 
     // Hàm kiểm tra email tồn tại chưa (cho register validation)
     public function emailExists($email)
     {
         $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->num_rows > 0;
+        $stmt->execute([$email]);
+        
+        return $stmt->rowCount() > 0;
     }
 
     // Hàm insert notification (private, dùng nội bộ)
@@ -75,7 +69,6 @@ class User extends Model
             INSERT INTO notifications (user_id, type, sent_at, status) 
             VALUES (?, ?, CURRENT_TIMESTAMP, 'sent')
         ");
-        $stmt->bind_param("is", $user_id, $type);
-        $stmt->execute();
+        $stmt->execute([$user_id, $type]);
     }
 }
