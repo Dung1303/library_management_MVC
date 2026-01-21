@@ -21,7 +21,7 @@
             Registration successful! Please login.</div>
         <?php endif; ?>
 
-        <form method="POST">
+        <form method="POST" action="/library_management_system/public/auth/login">
             <div class="form-group">
                 <label class="label" for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>

@@ -64,7 +64,7 @@ class AuthController extends Controller
             if ($_SESSION['role'] === 'admin') {
                 header('Location: /library_management_system/public/admin/dashboard');
             } else {
-                header('Location: /library_management_system/public/member/home');
+                header('Location: /library_management_system/public/home');
             }
             exit;
         }
@@ -95,7 +95,7 @@ class AuthController extends Controller
                     if ($user['role'] === 'admin') {
                         header('Location: /library_management_system/public/admin/dashboard');
                     } else {
-                        header('Location: /library_management_system/public/member/home');
+                        header('Location: /library_management_system/public/home');
                     }
                     exit;
                 } else {

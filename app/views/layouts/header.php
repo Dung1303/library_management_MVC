@@ -17,7 +17,7 @@
         <div class="container">
 
             <a class="navbar-brand d-flex align-items-center" href="<?= BASE_URL ?>">
-                <img src="<?= BASE_URL ?>/images/logo.jpg" alt="LibraSys Logo" height="40" class="me-2">
+                <img src="<?= BASE_URL ?>/assets/images/logo.jpg" alt="LibraSys Logo" height="40" class="me-2">
                 <span class="fw-bold">LibraSys</span>
             </a>
 
@@ -40,23 +40,23 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <div class="text-end">
-                            <div class="fw-semibold">
-                                <?= htmlspecialchars($_SESSION['username']); ?>
-                            </div>
-                            <small class="text-muted"><?= ucfirst($_SESSION['role'] ?? 'Member'); ?></small>
+                    <div class="text-end">
+                        <div class="fw-semibold">
+                            <?= htmlspecialchars($_SESSION['username']); ?>
                         </div>
+                        <small class="text-muted"><?= ucfirst($_SESSION['role'] ?? 'Member'); ?></small>
+                    </div>
 
-                        <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-danger btn-sm">
-                            Logout
-                        </a>
+                    <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-danger btn-sm">
+                        Logout
+                    </a>
                     <?php else: ?>
-                        <a href="<?= BASE_URL ?>/auth/login" class="btn btn-primary btn-sm">
-                            Login
-                        </a>
-                        <a href="<?= BASE_URL ?>/auth/register" class="btn btn-outline-primary btn-sm">
-                            Register
-                        </a>
+                    <a href="<?= BASE_URL ?>/auth/login" class="btn btn-primary btn-sm">
+                        Login
+                    </a>
+                    <a href="<?= BASE_URL ?>/auth/register" class="btn btn-outline-primary btn-sm">
+                        Register
+                    </a>
                     <?php endif; ?>
                 </div>
             </div>
