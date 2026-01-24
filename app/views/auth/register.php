@@ -1,6 +1,14 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="/library_management_system/public/assets/css/register.css">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Library Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/register.css">
+</head>
+<body>
 <div class="register-container">
     <div class="header">
         <div class="logo"><i class="bi bi-book-fill"></i></div>
@@ -13,7 +21,7 @@
         <p style="color: red; text-align: center; margin-bottom: 15px;"><?php echo $error; ?></p>
         <?php endif; ?>
 
-        <form method="POST">
+        <form method="POST" action="<?= BASE_URL ?>/auth/register">
             <div class="form-group">
                 <label class="label" for="full_name">Full Name</label>
                 <input type="text" id="full_name" name="full_name" placeholder="E.g: John Doe" required>
@@ -50,7 +58,7 @@
 
             <div class="login-link">
                 If you already have an account, please
-                <a href="/library_management_system/public/auth/login">Login</a>
+                <a href="<?= BASE_URL ?>/auth/login">Login</a>
             </div>
             <button type="submit" class="btn-register">Register</button>
         </form>
@@ -71,3 +79,5 @@ function togglePassword(id, iconId) {
     }
 }
 </script>
+</body>
+</html>

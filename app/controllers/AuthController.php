@@ -93,9 +93,9 @@ class AuthController extends Controller
 
                     // Redirect dựa trên role
                     if ($user['role'] === 'admin') {
-                        header('Location: /library_management_system/public/admin/dashboard');
+                        header("Location: " . BASE_URL . "/admin/dashboard");
                     } else {
-                        header('Location: /library_management_system/public/home');
+                        header("Location: " . BASE_URL . "/home");
                     }
                     exit;
                 } else {
@@ -118,7 +118,7 @@ class AuthController extends Controller
         session_destroy();
 
         // Redirect về login
-        header('Location: /library_management_system/public/auth/login');
+        header("Location: " . BASE_URL . "/auth/login");
         exit;
     }
 }

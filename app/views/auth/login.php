@@ -1,6 +1,14 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="/library_management_system/public/assets/css/login.css">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Library Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login.css">
+</head>
+<body>
 <div class="login-container">
     <div class="header">
         <div class="logo"><i class="bi bi-book-fill"></i></div>
@@ -21,7 +29,7 @@
             Registration successful! Please login.</div>
         <?php endif; ?>
 
-        <form method="POST" action="/library_management_system/public/auth/login">
+        <form method="POST" action="<?= BASE_URL ?>/auth/login">
             <div class="form-group">
                 <label class="label" for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
@@ -36,11 +44,11 @@
                 </div>
             </div>
 
-            <a href="/auth/forgot_password" class="forgot-link">Forgot password?</a>
+            <a href="<?= BASE_URL ?>/auth/forgot_password" class="forgot-link">Forgot password?</a>
 
             <div style="text-align: center; margin: 25px 0 30px;">
                 <span style="color: #666; font-size: 0.95rem;">Don't have an account? </span>
-                <a href="/library_management_system/public/auth/register"
+                <a href="<?= BASE_URL ?>/auth/register"
                     style="color: #667eea; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Register</a>
             </div>
 
@@ -63,3 +71,5 @@ function togglePassword(id) {
     }
 }
 </script>
+</body>
+</html>
