@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="/library_management_system/public/assets/css/register.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/register.css">
 
 <div class="register-container">
     <div class="header">
@@ -10,7 +10,7 @@
 
     <div class="form-content">
         <?php if (isset($error)): ?>
-        <p style="color: red; text-align: center; margin-bottom: 15px;"><?php echo $error; ?></p>
+            <p style="color: red; text-align: center; margin-bottom: 15px;"><?php echo $error; ?></p>
         <?php endif; ?>
 
         <form method="POST">
@@ -50,7 +50,7 @@
 
             <div class="login-link">
                 If you already have an account, please
-                <a href="/library_management_system/public/auth/login">Login</a>
+                <a href="<?= BASE_URL ?>/auth/login">Login</a>
             </div>
             <button type="submit" class="btn-register">Register</button>
         </form>
@@ -58,16 +58,16 @@
 </div>
 
 <script>
-// Hàm toggle hiển thị mật khẩu
-function togglePassword(id, iconId) {
-    var input = document.getElementById(id);
-    var icon = document.getElementById(iconId);
-    if (input.type === "password") {
-        input.type = "text";
-        icon.innerHTML = '<i class="bi bi-eye-slash"></i>';
-    } else {
-        input.type = "password";
-        icon.innerHTML = '<i class="bi bi-eye"></i>';
+    // Hàm toggle hiển thị mật khẩu
+    function togglePassword(id, iconId) {
+        var input = document.getElementById(id);
+        var icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            input.type = "password";
+            icon.innerHTML = '<i class="bi bi-eye"></i>';
+        }
     }
-}
 </script>

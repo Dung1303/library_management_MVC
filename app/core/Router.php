@@ -9,15 +9,15 @@ class Router
         // Parse từ REQUEST_URI nếu không có $_GET['url']
         $url = $_GET['url'] ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $url = trim($url, '/');
-        $parts = explode('/', $url);
+        $parts = !empty($url) ? explode('/', $url) : [];
 
         // Mặc định
-        $controllerName = !empty($parts[2])
-            ? ucfirst($parts[2]) . 'Controller'
+        $controllerName = !empty($parts[0])
+            ? ucfirst($parts[0]) . 'Controller'
             : 'HomeController';
 
-        $method = $parts[3] ?? 'index';
-        $params = array_slice($parts, 4);
+        $method = $parts[1] ?? 'index';
+        $params = array_slice($parts, 2);
 
         $controllerPath = __DIR__ . '/../controllers/' . $controllerName . '.php';
 

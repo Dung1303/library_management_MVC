@@ -23,4 +23,20 @@
                 'title' => 'Thư viện Sách'
             ]);
         }
+
+        public function detail($id)
+        {
+            $bookModel = $this->model('Book');
+            $book = $bookModel->getBookById($id);
+
+            if (!$book) {
+                header('Location: ' . BASE_URL . '/home');
+                exit;
+            }
+
+            $this->view('home/detail', [
+                'book' => $book,
+                'title' => $book['title'] . ' - Chi tiết'
+            ]);
+        }
     }
