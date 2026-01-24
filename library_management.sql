@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2026 at 10:22 AM
+-- Generation Time: Jan 24, 2026 at 06:09 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,34 +32,35 @@ CREATE TABLE `books` (
   `title` varchar(255) NOT NULL,
   `author` varchar(150) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `image_url` varchar(255) DEFAULT NULL
+  `image_url` varchar(255) DEFAULT NULL,
+  `Description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`book_id`, `title`, `author`, `category_id`, `image_url`) VALUES
-(1, 'Clean Code', 'Robert C. Martin', 1, 'CleanCode.png'),
-(2, 'Design Patterns', 'Gang of Four', 1, 'DesignPatterns.png'),
-(3, 'Đắc Nhân Tâm', 'Dale Carnegie', 4, 'DacNhanTam.png'),
-(4, 'Nhà Giả Kim', 'Paulo Coelho', 3, 'NhaGiaKim.png'),
-(5, 'Cha Giàu Cha Nghèo', 'Robert Kiyosaki', 2, 'Chagiauchangheo.png'),
-(6, 'Lập trình PHP MVC', 'John Smith', 1, 'LapTrinhPHP MVC.png'),
-(7, 'Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 3, 'Dế Mèn Phiêu Lưu Ký.png'),
-(8, 'Tư duy nhanh chậm', 'Daniel Kahneman', 4, 'Tư duy nhanh chậm.png'),
-(9, 'Kinh tế học vĩ mô', 'Paul Samuelson', 2, 'Kinh tế học vĩ mô.png'),
-(10, 'Giải thuật cơ bản', 'Lê Văn A', 1, 'Giải thuật cơ bản.png'),
-(11, 'Vũ trụ sơ khai', 'Stephen Hawking', 5, 'Vũ trụ sơ khai.png'),
-(12, 'Lịch sử vạn vật', 'Bill Bryson', 5, 'Lịch sử vạn vật.png'),
-(13, 'Quản trị kinh doanh', 'Trần Văn B', 2, 'Quản trị kinh doanh.png'),
-(14, 'Kỹ năng giao tiếp', 'Nguyễn Thị C', 4, 'Kỹ năng giao tiếp.png'),
-(15, 'Suối nguồn', 'Ayn Rand', 3, 'Suối nguồn.png'),
-(16, 'Mắt biếc', 'Nguyễn Nhật Ánh', 3, 'Mắt biếc.png'),
-(17, 'Tôi thấy hoa vàng', 'Nguyễn Nhật Ánh', 3, 'Tôi thấy hoa vàng.png'),
-(18, 'Lập trình Python', 'Guido van Rossum', 1, 'Lập trình Python.png'),
-(19, 'Trí tuệ nhân tạo', 'Andrew Ng', 1, 'Trí tuệ nhân tạo.png'),
-(20, 'Dữ liệu lớn', 'Hoàng Văn D', 1, 'Dữ liệu lớn.png');
+INSERT INTO `books` (`book_id`, `title`, `author`, `category_id`, `image_url`, `Description`) VALUES
+(1, 'Clean Code', 'Robert C. Martin', 1, 'CleanCode.png', 'Hướng dẫn các quy tắc và thực hành tốt nhất để viết mã nguồn sạch, dễ bảo trì cho lập trình viên.'),
+(2, 'Design Patterns', 'Gang of Four', 1, 'DesignPatterns.png', 'Tổng hợp 23 mẫu thiết kế kinh điển giúp giải quyết các vấn đề phổ biến trong thiết kế phần mềm.'),
+(3, 'Đắc Nhân Tâm', 'Dale Carnegie', 4, 'DacNhanTam.png', 'Cuốn sách nghệ thuật ứng xử nổi tiếng nhất thế giới, giúp bạn thu phục lòng người.'),
+(4, 'Nhà Giả Kim', 'Paulo Coelho', 3, 'NhaGiaKim.png', 'Hành trình theo đuổi vận mệnh của chàng chăn cừu Santiago, một tác phẩm đầy tính nhân văn.'),
+(5, 'Cha Giàu Cha Nghèo', 'Robert Kiyosaki', 2, 'Chagiauchangheo.png', 'Chia sẻ về tư duy tài chính, sự khác biệt giữa tài sản và tiêu sản để đạt được tự do tài chính.'),
+(6, 'Lập trình PHP MVC', 'John Smith', 1, 'LapTrinhPHP MVC.png', 'Hướng dẫn xây dựng ứng dụng web bằng ngôn ngữ PHP dựa trên mô hình Model-View-Controller.'),
+(7, 'Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 3, 'Dế Mèn Phiêu Lưu Ký.png', 'Tác phẩm văn học thiếu nhi kinh điển kể về những chuyến phiêu lưu và bài học trưởng thành.'),
+(8, 'Tư duy nhanh chậm', 'Daniel Kahneman', 4, 'Tư duy nhanh chậm.png', 'Khám phá hai hệ thống tư duy chi phối cách con người suy nghĩ và đưa ra quyết định.'),
+(9, 'Kinh tế học vĩ mô', 'Paul Samuelson', 2, 'Kinh tế học vĩ mô.png', 'Giáo trình kinh điển cung cấp kiến thức nền tảng về vận hành của nền kinh tế toàn cầu.'),
+(10, 'Giải thuật cơ bản', 'Lê Văn A', 1, 'Giải thuật cơ bản.png', 'Trình bày các thuật toán nền tảng trong khoa học máy tính như sắp xếp và cấu trúc dữ liệu.'),
+(11, 'Vũ trụ sơ khai', 'Stephen Hawking', 5, 'Vũ trụ sơ khai.png', 'Giải thích các lý thuyết vật lý hiện đại về nguồn gốc của vũ trụ và thời gian.'),
+(12, 'Lịch sử vạn vật', 'Bill Bryson', 5, 'Lịch sử vạn vật.png', 'Một hành trình khám phá khoa học từ vụ nổ Big Bang đến sự hình thành văn minh nhân loại.'),
+(13, 'Quản trị kinh doanh', 'Trần Văn B', 2, 'Quản trị kinh doanh.png', 'Kiến thức tổng quan về quản lý doanh nghiệp, nhân sự và chiến lược kinh doanh.'),
+(14, 'Kỹ năng giao tiếp', 'Nguyễn Thị C', 4, 'Kỹ năng giao tiếp.png', 'Các phương pháp giúp cải thiện khả năng truyền đạt thông tin và lắng nghe hiệu quả.'),
+(15, 'Suối nguồn', 'Ayn Rand', 3, 'Suối nguồn.png', 'Cuốn tiểu thuyết về sự tôn thờ cá nhân và cuộc đấu tranh bảo vệ cái tôi sáng tạo.'),
+(16, 'Mắt biếc', 'Nguyễn Nhật Ánh', 3, 'Mắt biếc.png', 'Một chuyện tình buồn, trong sáng của Ngạn dành cho Hà Lan - cô gái có đôi mắt đẹp hút hồn.'),
+(17, 'Tôi thấy hoa vàng', 'Nguyễn Nhật Ánh', 3, 'Tôi thấy hoa vàng.png', 'Những lát cắt tuổi thơ hồn nhiên ở làng quê nghèo với tình anh em và sự đố kỵ trẻ con.'),
+(18, 'Lập trình Python', 'Guido van Rossum', 1, 'Lập trình Python.png', 'Tài liệu hướng dẫn từ cơ bản đến nâng cao về Python – ngôn ngữ lập trình phổ biến nhất.'),
+(19, 'Trí tuệ nhân tạo', 'Andrew Ng', 1, 'Trí tuệ nhân tạo.png', 'Giới thiệu các khái niệm cốt lõi của AI, Machine Learning và tầm ảnh hưởng của chúng.'),
+(20, 'Dữ liệu lớn', 'Hoàng Văn D', 1, 'Dữ liệu lớn.png', 'Phân tích cách dữ liệu lớn đang thay đổi thế giới từ kinh doanh đến đời sống.');
 
 -- --------------------------------------------------------
 
@@ -233,7 +234,8 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `type`, `sent_at`, `s
 (6, 9, 'register', '2026-01-19 02:09:08', 'sent'),
 (7, 10, 'register', '2026-01-19 02:29:07', 'sent'),
 (8, 11, 'register', '2026-01-19 02:36:00', 'sent'),
-(9, 12, 'register', '2026-01-19 03:35:35', 'sent');
+(9, 12, 'register', '2026-01-19 03:35:35', 'sent'),
+(10, 13, 'register', '2026-01-24 19:02:32', 'sent');
 
 -- --------------------------------------------------------
 
@@ -267,7 +269,8 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `email`, `r
 (9, 'thuy', '$2y$10$UBf5Nfpj4qBVWkpRqsPZw.BPWX56pQhWn553Ss06XTQN2qVTgZwQG', 'thuy123', 'thuy123@gmail.com', 'member', 'active'),
 (10, 'tu123123', '$2y$10$DFwRPImvBbtzqsZ67ja1GedcdqS1USUV/.pA36ID7gwWOMn/WJRie', 'tunguyen', 'tu123@gmail.com', 'member', 'active'),
 (11, 'viet123', '$2y$10$aURLLxk5WrFaiW1DmQGAHep1WhHDDjErNAUaA43UOAbnJDVFsM5hq', 'vietnguyen', 'viet123@gmail.com', 'member', 'active'),
-(12, 'ThuTrang', '$2y$10$8MF2E/FqdBc0zXOQEkgqYO4PunMQ.08w70dV5tFqrfwMRjm9iSI16', 'Nguyễn Thu Trang', 'trang1234@gmail.com', 'member', 'active');
+(12, 'ThuTrang', '$2y$10$8MF2E/FqdBc0zXOQEkgqYO4PunMQ.08w70dV5tFqrfwMRjm9iSI16', 'Nguyễn Thu Trang', 'trang1234@gmail.com', 'member', 'active'),
+(13, 'mintu', '$2y$10$wggEpV6qVtu93up76EO78u0EZSkexyNj6dNEQu1I4HTvd4i0Y0fqG', 'Tu Ngo Minh', 'minhtu080906@gmail.com', 'member', 'active');
 
 --
 -- Indexes for dumped tables
@@ -362,13 +365,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
