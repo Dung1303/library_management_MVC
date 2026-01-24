@@ -10,9 +10,9 @@ class AuthController extends Controller
         // Nếu đã login, redirect về home dựa trên role
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['role'] === 'admin') {
-                header('Location: /library_management_system/public/admin/dashboard');
+                header('Location: ' . BASE_URL . '/admin/dashboard');
             } else {
-                header('Location: /library_management_system/public/member/home');
+                header('Location: ' . BASE_URL . '/home');
             }
             exit;
         }
@@ -41,7 +41,7 @@ class AuthController extends Controller
                 // Tạo user mới
                 if ($userModel->createUser($username, $password, $full_name, $email)) {
                     // Redirect về login sau register thành công
-                    header('Location: /library_management_system/public/auth/login?success=registered');
+                    header('Location: ' . BASE_URL . '/auth/login?success=registered');
                     exit;
                 } else {
                     $error = "Registration failed. Please try again.";
@@ -62,9 +62,9 @@ class AuthController extends Controller
         // Nếu đã login, redirect về home dựa trên role
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['role'] === 'admin') {
-                header('Location: /library_management_system/public/admin/dashboard');
+                header('Location: ' . BASE_URL . '/admin/dashboard');
             } else {
-                header('Location: /library_management_system/public/home');
+                header('Location: ' . BASE_URL . '/home');
             }
             exit;
         }
@@ -86,16 +86,16 @@ class AuthController extends Controller
 
                 // Kiểm tra password
                 if ($user && password_verify($password, $user['password']) && $user['status'] === 'active') {
-                // Set session
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
+                    // Set session
+                    $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['role'] = $user['role'];
 
                     // Redirect dựa trên role
                     if ($user['role'] === 'admin') {
-                        header('Location: /library_management_system/public/admin/dashboard');
+                        header('Location: ' . BASE_URL . '/admin/dashboard');
                     } else {
-                        header('Location: /library_management_system/public/home');
+                        header('Location: ' . BASE_URL . '/home');
                     }
                     exit;
                 } else {
@@ -118,7 +118,7 @@ class AuthController extends Controller
         session_destroy();
 
         // Redirect về login
-        header('Location: /library_management_system/public/auth/login');
+        header('Location: ' . BASE_URL . '/auth/login');
         exit;
     }
 }
