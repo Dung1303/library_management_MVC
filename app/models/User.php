@@ -44,6 +44,18 @@ class User extends Model
         return $result;
     }
 
+    // Hàm lấy user bằng user_id (cho profile)
+    public function getUserById($user_id)
+    {
+        // Chuẩn bị query select
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Trả về row nếu tồn tại
+        return $result;
+    }
+
     // Hàm kiểm tra username tồn tại chưa (cho register validation)
     public function usernameExists($username)
     {
@@ -54,12 +66,43 @@ class User extends Model
     }
 
     // Hàm kiểm tra email tồn tại chưa (cho register validation)
-    public function emailExists($email)
+    public function emailExists($email, $exclude_user_id = null)
     {
-        $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
-        $stmt->execute([$email]);
+        if ($exclude_user_id) {
+            // Nếu có user_id để exclude (update profile)
+            $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ? AND user_id != ?");
+            $stmt->execute([$email, $exclude_user_id]);
+        } else {
+            // Nếu không (register)
+            $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+        }
         
         return $stmt->rowCount() > 0;
+    }
+
+    // Hàm cập nhật profile user
+    public function updateProfile($user_id, $full_name, $email)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET full_name = ?, email = ? 
+            WHERE user_id = ?
+        ");
+        
+        return $stmt->execute([$full_name, $email, $user_id]);
+    }
+
+    // Hàm cập nhật mật khẩu user
+    public function updatePassword($user_id, $hashed_password)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET password = ? 
+            WHERE user_id = ?
+        ");
+        
+        return $stmt->execute([$hashed_password, $user_id]);
     }
 
     // Hàm insert notification (private, dùng nội bộ)
