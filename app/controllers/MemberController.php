@@ -7,7 +7,7 @@ class MemberController extends Controller
     {
         // Kiểm tra xem user đã login hay chưa
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /library_management_system/auth/login');
+            header("Location: " . BASE_URL . "/auth/login");
             exit;
         }
 
