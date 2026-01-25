@@ -16,7 +16,7 @@
                 <?= htmlspecialchars($book['title']) ?></h1>
 
             <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;">
-                Tác giả: <strong style="color: var(--text-dark);"><?= htmlspecialchars($book['author']) ?></strong>
+                Author: <strong style="color: var(--text-dark);"><?= htmlspecialchars($book['author']) ?></strong>
             </p>
 
             <div style="margin-bottom: 20px;">
@@ -25,7 +25,8 @@
             </div>
 
             <div style="margin-bottom: 20px;">
-                <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">Mô tả
+                <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">
+                    Description
                 </h5>
                 <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">
                     <?= nl2br(htmlspecialchars($book['Description'] ?? 'Chưa có mô tả cho cuốn sách này.')) ?></p>
@@ -33,18 +34,19 @@
 
             <div class="stock-status"
                 style="font-size: 1.1rem; margin-bottom: 30px; padding: 15px; background: var(--bg-light); border-radius: 8px; display: inline-block;">
-                Trạng thái:
+                Status:
                 <?php if ($book['available'] > 0): ?>
-                    <span style="color: var(--success); font-weight: bold;"><?= $book['available'] ?> bản có sẵn</span>
+                <span style="color: var(--success); font-weight: bold;"><?= $book['available'] ?> available
+                    version</span>
                 <?php else: ?>
-                    <span style="color: var(--danger); font-weight: bold;">Hết hàng</span>
+                <span style="color: var(--danger); font-weight: bold;">Out of stock</span>
                 <?php endif; ?>
             </div>
 
             <div class="actions" style="margin-top: 20px;">
                 <a href="<?= BASE_URL ?>/home"
                     style="text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 1rem;">
-                    &larr; Quay lại trang chủ
+                    &larr; Homepage
                 </a>
             </div>
 
