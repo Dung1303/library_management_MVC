@@ -1,80 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Library Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
-</head>
-<body>
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-9">
-            <h2 class="mb-4 text-primary"><i class="bi bi-person-circle"></i> Trang cá nhân</h2>
+<!-- Link CSS riêng cho trang Profile -->
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/profile.css">
 
-            <?php if(isset($_SESSION['success'])): ?>
-                <div class="alert alert-success alert-dismissible fade show">
-                    <?= $_SESSION['success']; unset($_SESSION['success']); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
+    <div class="profile-header text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-0">My Profile</h2>
+            <p class="opacity-75">Manage your account settings and security</p>
+        </div>
+    </div>
 
-            <?php if(isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger alert-dismissible fade show">
-                    <?= $_SESSION['error']; unset($_SESSION['error']); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-4">Thông tin cơ bản</h5>
-                            <form action="<?= BASE_URL ?>/user/update" method="POST">
-                                <div class="mb-3">
-                                    <label class="small text-muted">Họ và tên</label>
-                                    <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($user['full_name']) ?>" required>
+    <div class="container mb-5 mt-n4rem">
+        <div class="row justify-content-center">
+            <!-- Sidebar / User Info -->
+            <div class="col-lg-4 mb-4">
+                <div class="card profile-card h-100">
+                    <div class="card-body text-center p-5">
+                        <div class="avatar-circle">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-1"><?= htmlspecialchars($user['full_name']) ?></h4>
+                        <p class="text-muted mb-3"><?= htmlspecialchars($user['email']) ?></p>
+                        <span class="badge bg-light text-primary border border-primary rounded-pill px-3 py-2">
+                            <?= ucfirst(htmlspecialchars($user['role'])) ?>
+                        </span>
+                        <hr class="my-4">
+                        <div class="d-grid gap-2 text-start">
+                            <div class="d-flex align-items-center text-muted">
+                                <i class="bi bi-person-badge me-3 fs-5"></i>
+                                <div>
+                                    <small class="d-block">Username</small>
+                                    <span class="text-dark fw-medium"><?= htmlspecialchars($user['username']) ?></span>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="small text-muted">Email</label>
-                                    <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary px-4">Lưu thay đổi</button>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm text-white bg-dark">
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-4">Bảo mật tài khoản</h5>
-                            <form action="<?= BASE_URL ?>/user/changePassword" method="POST">
-                                <div class="mb-3">
-                                    <input type="password" name="current_password" class="form-control bg-secondary text-white border-0" placeholder="Mật khẩu hiện tại" required>
+            <!-- Settings Forms -->
+            <div class="col-lg-8">
+                <?php if(isset($_SESSION['success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <?php endif; ?>
+
+                <?php if(isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <?php endif; ?>
+
+                <!-- Edit Profile -->
+                <div class="card profile-card mb-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <h5 class="card-title fw-bold"><i class="bi bi-pencil-square me-2 text-primary"></i>Basic
+                            Information</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form action="<?= BASE_URL ?>/user/update" method="POST">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-bold">Full Name</label>
+                                    <input type="text" name="full_name" class="form-control form-control-lg fs-6"
+                                        value="<?= htmlspecialchars($user['full_name']) ?>" required>
                                 </div>
-                                <div class="mb-3">
-                                    <input type="password" name="new_password" class="form-control bg-secondary text-white border-0" placeholder="Mật khẩu mới" required>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-bold">Email Address</label>
+                                    <input type="email" name="email" class="form-control form-control-lg fs-6"
+                                        value="<?= htmlspecialchars($user['email']) ?>" required>
                                 </div>
-                                <div class="mb-3">
-                                    <input type="password" name="confirm_password" class="form-control bg-secondary text-white border-0" placeholder="Xác nhận mật khẩu mới" required>
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-primary px-4 py-2 fw-medium">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="card profile-card">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <h5 class="card-title fw-bold"><i class="bi bi-shield-lock me-2 text-primary"></i>Security</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form action="<?= BASE_URL ?>/user/changePassword" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label text-muted small fw-bold">Current Password</label>
+                                <input type="password" name="current_password" class="form-control form-control-lg fs-6"
+                                    placeholder="••••••••" required>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-bold">New Password</label>
+                                    <input type="password" name="new_password" class="form-control form-control-lg fs-6"
+                                        placeholder="••••••••" required>
                                 </div>
-                                <button type="submit" class="btn btn-light w-100">Cập nhật mật khẩu</button>
-                            </form>
-                        </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-bold">Confirm New Password</label>
+                                    <input type="password" name="confirm_password"
+                                        class="form-control form-control-lg fs-6" placeholder="••••••••" required>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-outline-primary px-4 py-2 fw-medium">Update
+                                    Password</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

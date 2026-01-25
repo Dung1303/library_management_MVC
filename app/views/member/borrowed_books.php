@@ -15,40 +15,40 @@ foreach ($currentBorrows as $borrow) {
 <div class="container my-5">
     <div class="page-title">
         <i class="bi bi-book-half"></i>
-        <span>Sách Đang Mượn & Lịch Sử Mượn</span>
+        <span>Borrowed Books & Borrowing History</span>
     </div>
 
     <!-- Statistics Cards -->
     <div class="row mb-5 gy-4">
         <div class="col-md-4 col-sm-6">
-            <div class="card text-center shadow-sm h-100 stat-card-primary">
+            <div class="card text-center shadow-sm h-100 stat-card stat-card-primary">
                 <div class="card-body py-4">
                     <div class="stat-icon">
                         <i class="bi bi-book"></i>
                     </div>
-                    <h5 class="card-title">Tổng Mượn</h5>
+                    <h5 class="card-title">Total Borrows</h5>
                     <p class="card-text stat-number stat-number-primary"><?php echo $totalBorrows; ?></p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6">
-            <div class="card text-center shadow-sm h-100 stat-card-purple">
+            <div class="card text-center shadow-sm h-100 stat-card stat-card-purple">
                 <div class="card-body py-4">
                     <div class="stat-icon">
                         <i class="bi bi-bookmark-check"></i>
                     </div>
-                    <h5 class="card-title">Đang Mượn</h5>
+                    <h5 class="card-title">Currently Borrowed</h5>
                     <p class="card-text stat-number stat-number-purple"><?php echo count($currentBorrows); ?></p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6">
-            <div class="card text-center shadow-sm h-100 stat-card-danger">
+            <div class="card text-center shadow-sm h-100 stat-card stat-card-danger">
                 <div class="card-body py-4">
                     <div class="stat-icon">
                         <i class="bi bi-exclamation-circle"></i>
                     </div>
-                    <h5 class="card-title">Quá Hạn</h5>
+                    <h5 class="card-title">Overdue</h5>
                     <p class="card-text stat-number stat-number-danger"><?php echo $overdueCount; ?></p>
                 </div>
             </div>
@@ -60,22 +60,20 @@ foreach ($currentBorrows as $borrow) {
         <div class="col-md-6">
             <div class="card shadow-sm border-0 cursor-pointer section-card section-transition" data-section="current">
                 <div class="card-body text-center py-5">
-                    <i class="bi bi-bookmark-star"
-                        style="font-size: 28px; color: #4f46e5; margin-bottom: 12px; display: block;"></i>
-                    <h5 class="card-title section-card-title">Sách Đang Mượn</h5>
-                    <p class="text-muted mb-2"><?php echo count($currentBorrows); ?> cuốn sách</p>
-                    <p class="text-muted mb-0"><small>Click để xem chi tiết</small></p>
+                    <i class="bi bi-bookmark-star section-card-icon"></i>
+                    <h5 class="card-title section-card-title">Currently Borrowed Books</h5>
+                    <p class="text-muted mb-2"><?php echo count($currentBorrows); ?> books</p>
+                    <p class="text-muted mb-0"><small>Click to view details</small></p>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card shadow-sm border-0 cursor-pointer section-card section-transition" data-section="history">
                 <div class="card-body text-center py-5">
-                    <i class="bi bi-clock-history"
-                        style="font-size: 28px; color: #7c3aed; margin-bottom: 12px; display: block;"></i>
-                    <h5 class="card-title section-card-title-history">Lịch Sử Mượn</h5>
-                    <p class="text-muted mb-2"><?php echo count($borrowHistory); ?> bản ghi</p>
-                    <p class="text-muted mb-0"><small>Click để xem chi tiết</small></p>
+                    <i class="bi bi-clock-history section-card-icon"></i>
+                    <h5 class="card-title section-card-title-history">Borrowing History</h5>
+                    <p class="text-muted mb-2"><?php echo count($borrowHistory); ?> records</p>
+                    <p class="text-muted mb-0"><small>Click to view details</small></p>
                 </div>
             </div>
         </div>
@@ -87,27 +85,27 @@ foreach ($currentBorrows as $borrow) {
             <div class="card-header card-header-section">
                 <h5>
                     <i class="bi bi-bookmark-check"></i>
-                    Sách Đang Mượn
+                    Currently Borrowed Books
                 </h5>
             </div>
             <div class="card-body">
                 <?php if (empty($currentBorrows)): ?>
                 <div class="alert alert-info text-center" role="alert">
-                    <i class="bi bi-info-circle"></i> Bạn hiện không có sách nào đang mượn.
+                    <i class="bi bi-info-circle"></i> You currently have no borrowed books.
                 </div>
                 <?php else: ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>STT</th>
-                                <th>Tên Sách</th>
-                                <th>Tác Giả</th>
-                                <th>Mã Barcode</th>
-                                <th>Ngày Mượn</th>
-                                <th>Ngày Trả Hạn</th>
-                                <th>Tình Trạng</th>
-                                <th>Còn Lại</th>
+                                <th>No.</th>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Barcode</th>
+                                <th>Borrow Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Days Remaining</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,10 +118,10 @@ foreach ($currentBorrows as $borrow) {
 
                                     if ($borrow['status'] == 'overdue') {
                                         $statusClass = 'badge bg-danger';
-                                        $statusText = 'Quá Hạn';
+                                        $statusText = 'Overdue';
                                     } else {
                                         $statusClass = 'badge bg-success';
-                                        $statusText = 'Đang Mượn';
+                                        $statusText = 'Borrowed';
                                     }
 
                                     // Màu cảnh báo ngày còn lại
@@ -147,11 +145,11 @@ foreach ($currentBorrows as $borrow) {
                                 <td><span class="<?php echo $daysClass; ?>">
                                         <?php 
                                             if ($daysRemaining > 0) {
-                                                echo $daysRemaining . ' ngày';
+                                                echo $daysRemaining . ' days';
                                             } elseif ($daysRemaining == 0) {
-                                                echo 'Hôm nay';
+                                                echo 'Today';
                                             } else {
-                                                echo abs($daysRemaining) . ' ngày quá hạn';
+                                                echo abs($daysRemaining) . ' days overdue';
                                             }
                                             ?>
                                     </span></td>
@@ -170,27 +168,27 @@ foreach ($currentBorrows as $borrow) {
             <div class="card-header card-header-section">
                 <h5>
                     <i class="bi bi-clock-history"></i>
-                    Lịch Sử Mượn
+                    Borrowing History
                 </h5>
             </div>
             <div class="card-body">
                 <?php if (empty($borrowHistory)): ?>
                 <div class="alert alert-info text-center" role="alert">
-                    <i class="bi bi-info-circle"></i> Bạn chưa có lịch sử mượn sách nào.
+                    <i class="bi bi-info-circle"></i> You have no borrowing history yet.
                 </div>
                 <?php else: ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>STT</th>
-                                <th>Tên Sách</th>
-                                <th>Tác Giả</th>
-                                <th>Mã Barcode</th>
-                                <th>Ngày Mượn</th>
-                                <th>Ngày Trả Hạn</th>
-                                <th>Ngày Trả Thực Tế</th>
-                                <th>Tình Trạng</th>
+                                <th>No.</th>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Barcode</th>
+                                <th>Borrow Date</th>
+                                <th>Due Date</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,15 +201,15 @@ foreach ($currentBorrows as $borrow) {
                                     switch ($history['status']) {
                                         case 'returned':
                                             $statusClass = 'badge bg-secondary';
-                                            $statusText = 'Đã Trả';
+                                            $statusText = 'Returned';
                                             break;
                                         case 'overdue':
                                             $statusClass = 'badge bg-danger';
-                                            $statusText = 'Quá Hạn';
+                                            $statusText = 'Overdue';
                                             break;
                                         default:
                                             $statusClass = 'badge bg-success';
-                                            $statusText = 'Đang Mượn';
+                                            $statusText = 'Borrowed';
                                     }
                                     ?>
                             <tr>
@@ -226,7 +224,7 @@ foreach ($currentBorrows as $borrow) {
                                             if ($history['return_date']) {
                                                 echo date('d/m/Y', strtotime($history['return_date']));
                                             } else {
-                                                echo '<span class="text-muted">Chưa trả</span>';
+                                                echo '<span class="text-muted">Not returned</span>';
                                             }
                                             ?>
                                 </td>
