@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/borrowed_books.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css">
 </head>
 
 <body>
@@ -32,9 +33,15 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="<?= BASE_URL ?>">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/member/borrowedBooks">Borrowed Books</a>
-                    </li>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-primary" href="<?= BASE_URL ?>/admin/dashboard">Management</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= BASE_URL ?>/member/borrowedBooks">Borrowed Books</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>/user/profile">Profile</a>
                     </li>
