@@ -93,6 +93,14 @@ class User extends Model
         return $stmt->execute([$full_name, $email, $user_id]);
     }
 
+    // Hàm lấy tổng số users (thành viên hoạt động)
+    public function getTotalUsersCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'member'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
     // Hàm cập nhật mật khẩu user
     public function updatePassword($user_id, $hashed_password)
     {

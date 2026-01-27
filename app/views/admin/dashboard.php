@@ -21,39 +21,38 @@
                 </h5>
                 <ul class="nav flex-column w-100">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link active" href="<?= BASE_URL ?>/admin/overview">
                             <i class="bi bi-speedometer2 me-2"></i>Overview
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?= BASE_URL ?>/admin/books">
                             <i class="bi bi-book me-2"></i> Book Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?= BASE_URL ?>/admin/copies">
                             <i class="bi bi-files me-2"></i> Book Copies Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?= BASE_URL ?>/admin/members">
                             <i class="bi bi-people me-2"></i> Member Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?= BASE_URL ?>/admin/borrow">
                             <i class="bi bi-arrow-left-right me-2"></i> Borrowing and Returning Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="#">
+                        <a class="nav-link text-danger" href="<?= BASE_URL ?>/admin/overdue">
                             <i class="bi bi-exclamation-circle me-2"></i> Overdue Books
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
-
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
             <div class="d-flex align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <button class="btn btn-outline-secondary me-3" id="sidebarToggle">
@@ -69,15 +68,16 @@
         </main>
     </div>
 </div>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('adminSidebar');
-        const mainContent = document.querySelector('main');
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('adminSidebar');
+    const mainContent = document.querySelector('main');
 
-        toggleBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('show');
-            mainContent.classList.toggle('sidebar-active');
-        });
+    toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('show');
+        mainContent.classList.toggle('sidebar-active');
     });
+});
 </script>

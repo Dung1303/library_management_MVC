@@ -78,4 +78,32 @@ class BorrowRecord extends Model
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Lấy tổng số sách đang mượn (chưa trả)
+    public function getTotalBorrowingCount()
+    {
+        $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total 
+                FROM borrow_records br
+                WHERE br.status != 'returned' AND br.return_date IS NULL";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    // Lấy tổng số sách quá hạn
+    public function getOverdueBooksCount()
+    {
+        $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total 
+                FROM borrow_records br
+                WHERE br.status = 'overdue' AND br.return_date IS NULL";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
 }
