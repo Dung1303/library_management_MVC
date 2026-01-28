@@ -1,28 +1,32 @@
 <?php
 // app/controllers/UserController.php
 
-class UserController extends Controller {
+class UserController extends Controller
+{
     private $userModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         // Sử dụng hàm model() từ core/Controller.php để load model User
         $this->userModel = $this->model('User');
     }
 
     // Method mặc định khi truy cập /user hoặc /user/index
-    public function index() {
+    public function index()
+    {
         $this->profile();
     }
 
     // Xử lý hiển thị Profile: /user/profile
-    public function profile() {
+    public function profile()
+    {
         if (!isset($_SESSION['user_id'])) {
             header("Location: " . BASE_URL . "/auth/login");
             exit;
         }
 
         $user = $this->userModel->getUserById($_SESSION['user_id']);
-        
+
         // Load view từ app/views/auth/profile.php
         $this->view('auth/profile', [
             'user' => $user
@@ -30,7 +34,8 @@ class UserController extends Controller {
     }
 
     // Xử lý cập nhật thông tin: /user/update
-    public function update() {
+    public function update()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_SESSION['user_id'];
             $full_name = trim($_POST['full_name']);
@@ -45,13 +50,12 @@ class UserController extends Controller {
             }
             header("Location: " . BASE_URL . "/user/profile");
             exit;
-            header("Location: " . $baseUrl . "/user/profile");
-            exit;
         }
     }
 
     // Xử lý đổi mật khẩu: /user/changePassword
-    public function changePassword() {
+    public function changePassword()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_SESSION['user_id'];
             $current_pass = $_POST['current_password'];

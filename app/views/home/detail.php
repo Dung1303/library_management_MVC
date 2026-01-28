@@ -25,26 +25,35 @@
             </div>
 
             <div style="margin-bottom: 20px;">
+
                 <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">Description
-                </h5>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">
-                    <?= nl2br(htmlspecialchars($book['Description'] ?? 'No description available for this book.')) ?></p>
+
+                    <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">
+
+                    </h5>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">
+                        <?= nl2br(htmlspecialchars($book['Description'] ?? 'No description available for this book.')) ?></p>
             </div>
 
             <div class="stock-status"
                 style="font-size: 1.1rem; margin-bottom: 30px; padding: 15px; background: var(--bg-light); border-radius: 8px; display: inline-block;">
-                Availability:
+
+                Status:
                 <?php if ($book['available'] > 0): ?>
-                    <span style="color: var(--success); font-weight: bold;"><?= $book['available'] ?> copies available</span>
+                    <span style="color: var(--success); font-weight: bold;"><?= $book['available'] ?> available
+                        version</span>
                 <?php else: ?>
-                    <span style="color: var(--danger); font-weight: bold;">Out of Stock</span>
+                    <span style="color: var(--danger); font-weight: bold;">Out of stock</span>
+
                 <?php endif; ?>
             </div>
 
             <div class="actions" style="margin-top: 20px;">
                 <a href="<?= BASE_URL ?>/home"
                     style="text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 1rem;">
-                    &larr; Back to Home
+
+                    &larr; Homepage
+
                 </a>
             </div>
 

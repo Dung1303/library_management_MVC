@@ -114,7 +114,7 @@
                                 Password</button>
                         </div>
                     </form>
-                    >>>>>>> origin/dev
+
                 </div>
             </div>
         </div>

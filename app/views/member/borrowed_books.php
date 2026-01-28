@@ -30,7 +30,7 @@ foreach ($currentBorrows as $borrow) {
                     </div>
 
                     <h5 class="card-title">Total Borrows</h5>
-                    >>>>>>> origin/dev
+
                     <p class="card-text stat-number stat-number-primary"><?php echo $totalBorrows; ?></p>
                 </div>
             </div>
@@ -101,7 +101,7 @@ foreach ($currentBorrows as $borrow) {
                     <div class="alert alert-info text-center" role="alert">
 
                         <i class="bi bi-info-circle"></i> You currently have no borrowed books.
-                        >>>>>>> origin/dev
+
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
@@ -181,7 +181,7 @@ foreach ($currentBorrows as $borrow) {
                     <i class="bi bi-clock-history"></i>
 
                     Borrowing History
-                    >>>>>>> origin/dev
+
                 </h5>
             </div>
             <div class="card-body">
@@ -189,7 +189,7 @@ foreach ($currentBorrows as $borrow) {
                     <div class="alert alert-info text-center" role="alert">
 
                         <i class="bi bi-info-circle"></i> You have no borrowing history yet.
-                        >>>>>>> origin/dev
+
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
