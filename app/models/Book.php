@@ -26,6 +26,20 @@ class Book extends Model
         return $result['total'];
     }
 
+    public function getTotalCopiesCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM book_copies";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    public function getAvailableCopiesCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM book_copies WHERE status = 'available'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
     public function getBookById($id)
     {
         $sql = "SELECT b.*, c.category_name, 
