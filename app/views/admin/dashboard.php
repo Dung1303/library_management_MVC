@@ -1,83 +1,72 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 
-<div class="container-fluid admin-wrapper">
-    <button class="btn btn-primary d-md-none position-fixed top-0 start-0 m-2 z-3" type="button"
-        data-bs-toggle="offcanvas" data-bs-target="#adminSidebar">
-        <i class="bi bi-list"></i>
-    </button>
+<div class="admin-container">
+    <?php
+    // Tải sidebar admin
+    require_once __DIR__ . '/../layouts/sidebar.php';
+    ?>
 
-    <div class="row">
-        <div class="offcanvas-md offcanvas-start bg-light sidebar col-md-3 col-lg-2" tabindex="-1" id="adminSidebar"
-            aria-labelledby="adminSidebarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="adminSidebarLabel">Admin Panel</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar"
-                    aria-label="Close"></button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="admin-overview">
+            <div class="overview-header mb-4">
+                <h1>System Overview</h1>
+                <p>Summary statistics and reports</p>
             </div>
 
-            <div class="offcanvas-body pt-3 flex-column">
-                <h5 class="sidebar-heading px-3 mt-2 mb-3 text-muted text-uppercase d-none d-md-block">
-                    Admin Panel
-                </h5>
-                <ul class="nav flex-column w-100">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="<?= BASE_URL ?>/admin/overview">
-                            <i class="bi bi-speedometer2 me-2"></i>Overview
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/admin/books">
-                            <i class="bi bi-book me-2"></i> Book Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/admin/copies">
-                            <i class="bi bi-files me-2"></i> Book Copies Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/admin/members">
-                            <i class="bi bi-people me-2"></i> Member Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/admin/borrow">
-                            <i class="bi bi-arrow-left-right me-2"></i> Borrowing and Returning Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="<?= BASE_URL ?>/admin/overdue">
-                            <i class="bi bi-exclamation-circle me-2"></i> Overdue Books
-                        </a>
-                    </li>
-                </ul>
+            <div class="stats-grid">
+                <!-- Tổng đầu sách -->
+                <div class="stat-card books">
+                    <div class="stat-icon books"><i class="bi bi-book-fill"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Book Titles</div>
+                        <div class="stat-value"><?php echo isset($totalBooks) ? $totalBooks : 0; ?></div>
+                        <div class="stat-description">Total Book Titles</div>
+                    </div>
+                </div>
+
+                <!-- Thành viên hoạt động -->
+                <div class="stat-card members">
+                    <div class="stat-icon members"><i class="bi bi-people-fill"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Active Members</div>
+                        <div class="stat-value"><?php echo isset($totalMembers) ? $totalMembers : 0; ?></div>
+                        <div class="stat-description">Total Members</div>
+                    </div>
+                </div>
+
+                <!-- Đang mượn -->
+                <div class="stat-card borrowing">
+                    <div class="stat-icon borrowing"><i class="bi bi-arrow-repeat"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Currently Borrowed</div>
+                        <div class="stat-value"><?php echo isset($currentlyBorrowed) ? $currentlyBorrowed : 0; ?></div>
+                        <div class="stat-description">Books Currently Borrowed</div>
+                    </div>
+                </div>
+
+                <!-- Quá hạn -->
+                <div class="stat-card overdue">
+                    <div class="stat-icon overdue"><i class="bi bi-exclamation-circle-fill"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Overdue</div>
+                        <div class="stat-value"><?php echo isset($overdueBooks) ? $overdueBooks : 0; ?></div>
+                        <div class="stat-description">Immediate Action Required</div>
+                    </div>
+                </div>
+
+                <!-- Bản sao có sẵn -->
+                <div class="stat-card available">
+                    <div class="stat-icon available"><i class="bi bi-box-fill"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Available Copies</div>
+                        <div class="stat-value"><?php echo isset($availableBooks) ? $availableBooks : 0; ?></div>
+                        <div class="stat-description">Available for Borrowing</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-            <div class="d-flex align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <button class="btn btn-outline-secondary me-3" id="sidebarToggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <h1 class="h2">System Overview</h1>
-            </div>
-
-            <div class="alert alert-info">
-                Welcome back, Admin!
-            </div>
-
-        </main>
     </div>
 </div>
-<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('adminSidebar');
-    const mainContent = document.querySelector('main');
 
-    toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('show');
-        mainContent.classList.toggle('sidebar-active');
-    });
-});
-</script>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
