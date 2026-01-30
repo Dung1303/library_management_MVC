@@ -122,4 +122,17 @@ class User extends Model
         ");
         $stmt->execute([$user_id, $type]);
     }
+    // Lấy danh sách thành viên (member đang active)
+public function getAllMembers()
+{
+    $stmt = $this->db->prepare("
+        SELECT user_id, full_name, email
+        FROM users
+        WHERE role = 'member' AND status = 'active'
+        ORDER BY full_name ASC
+    ");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }

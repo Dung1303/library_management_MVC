@@ -16,22 +16,22 @@
         </li>
         <li class="sidebar-item">
             <a href="<?php echo BASE_URL; ?>/admin/books" class="sidebar-link active>
-                <i class=" bi bi-book"></i><span>Quản lý Sách</span>
+                <i class=" bi bi-book"></i><span>Book management</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="<?php echo BASE_URL; ?>/admin/members" class="sidebar-link active>
-                <i class=" bi bi-people"></i><span>Quản lý Thành viên</span>
+                <i class=" bi bi-people"></i><span>Member Management</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="<?php echo BASE_URL; ?>/admin/borrow" class="sidebar-link active>
-                <i class=" bi bi-arrow-left-right"></i><span>Quản lý Mượn/Trả</span>
+            <a href="<?php echo BASE_URL; ?>/borrow/index" class="sidebar-link active>
+                <i class=" bi bi-arrow-left-right"></i><span>Borrow/Return Management</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="<?php echo BASE_URL; ?>/admin/overdue" class="sidebar-link active>
-                <i class=" bi bi-exclamation-circle"></i><span>Sách Quá hạn</span>
+                <i class=" bi bi-exclamation-circle"></i><span>Overdue Books</span>
             </a>
         </li>
     </ul>
