@@ -39,4 +39,28 @@
                 'title' => $book['title'] . ' - Details'
             ]);
         }
+        // Hiển thị danh sách và phân trang
+        public function adminIndex()
+        {
+            $bookModel = $this->model('Book');
+            $catModel = $this->model('Category');
+
+            $limit = 10; // 10 cuốn sách trên 1 trang
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $offset = ($page - 1) * $limit;
+
+            $totalBooks = $bookModel->countBooksAdmin();
+            $totalPages = ceil($totalBooks / $limit);
+
+            $books = $bookModel->getBooksAdmin($limit, $offset);
+            $categories = $catModel->getAllCategories();
+
+            $this->view('admin/books', [
+                'books' => $books,
+                'categories' => $categories,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'title' => 'Book Management'
+            ]);
+        }
     }
