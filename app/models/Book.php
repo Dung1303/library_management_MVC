@@ -55,16 +55,16 @@ class Book extends Model
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    // Lấy sách cho Admin kèm phân trang
+    // Lấy danh sách sách cho Admin (kèm phân trang và thống kê số bản sao)
     public function getBooksAdmin($limit, $offset)
     {
         $sql = "SELECT b.*, c.category_name, 
-                (SELECT COUNT(*) FROM book_copies bc WHERE bc.book_id = b.book_id) as total_copies,
-                (SELECT COUNT(*) FROM book_copies bc WHERE bc.book_id = b.book_id AND bc.status = 'available') as available_copies
-                FROM books b
-                LEFT JOIN categories c ON b.category_id = c.category_id
-                ORDER BY b.book_id DESC
-                LIMIT :limit OFFSET :offset";
+            (SELECT COUNT(*) FROM book_copies bc WHERE bc.book_id = b.book_id) as total_copies,
+            (SELECT COUNT(*) FROM book_copies bc WHERE bc.book_id = b.book_id AND bc.status = 'available') as available_copies
+            FROM books b
+            LEFT JOIN categories c ON b.category_id = c.category_id
+            ORDER BY b.book_id DESC
+            LIMIT :limit OFFSET :offset";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
@@ -73,12 +73,10 @@ class Book extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Đếm tổng số đầu sách để tính số trang
+    // Đếm tổng số đầu sách để tính toán số trang
     public function countBooksAdmin()
     {
         $sql = "SELECT COUNT(*) as total FROM books";
         return $this->db->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
     }
-
-    // Các hàm CRUD (Thêm, Sửa, Xóa) tương tự như đã bàn trước đó...
 }

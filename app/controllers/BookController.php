@@ -39,75 +39,38 @@
                 'title' => $book['title'] . ' - Details'
             ]);
         }
-        // Hiển thị danh sách và phân trang
+        // Hiển thị giao diện chính (Read)
         public function adminIndex()
         {
-            $bookModel = $this->model('Book');
-            $catModel = $this->model('Category');
-
-            $limit = 10; // 10 cuốn sách trên 1 trang
+            $limit = 10;
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $offset = ($page - 1) * $limit;
 
-            $totalBooks = $bookModel->countBooksAdmin();
-            $totalPages = ceil($totalBooks / $limit);
-
-            $books = $bookModel->getBooksAdmin($limit, $offset);
-            $categories = $catModel->getAllCategories();
-
+            $bookModel = $this->model('Book');
             $this->view('admin/books', [
-                'books' => $books,
-                'categories' => $categories,
+                'books' => $bookModel->getBooksAdmin($limit, $offset),
+                'categories' => $this->model('Category')->getAllCategories(),
                 'currentPage' => $page,
-                'totalPages' => $totalPages,
-                'title' => 'Book Management'
+                'totalPages' => ceil($bookModel->countBooksAdmin() / $limit)
             ]);
         }
-        // Thêm sách mới & Bản sao
+
+        // Xử lý lưu (Create)
         public function store()
         {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $image = "";
+                $image = ""; // Xử lý upload ảnh nếu có
                 if (!empty($_FILES['image']['name'])) {
                     $image = time() . '_' . $_FILES['image']['name'];
                     move_uploaded_file($_FILES['image']['tmp_name'], 'public/uploads/' . $image);
                 }
-
-                $bookId = $this->model('Book')->createBook([
-                    'title' => $_POST['title'],
-                    'author' => $_POST['author'],
-                    'category_id' => $_POST['category_id'],
-                    'description' => $_POST['description'],
-                    'image_url' => $image
-                ]);
-
-                // Nếu tạo sách thành công, tạo luôn số lượng bản sao tương ứng
-                if ($bookId && $_POST['quantity'] > 0) {
-                    $this->model('Book')->addBookCopies($bookId, (int)$_POST['quantity']);
-                }
-                header('Location: ' . BASE_URL . '/book/adminIndex');
-            }
-        }
-        // Cập nhật sách
-        public function update($id)
-        {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $data = [
-                    'title' => $_POST['title'],
-                    'author' => $_POST['author'],
-                    'category_id' => $_POST['category_id'],
-                    'description' => $_POST['description']
-                ];
-                if (!empty($_FILES['image']['name'])) {
-                    $data['image_url'] = time() . '_' . $_FILES['image']['name'];
-                    move_uploaded_file($_FILES['image']['tmp_name'], 'public/uploads/' . $data['image_url']);
-                }
-                $this->model('Book')->updateBook($id, $data);
+                $bookId = $this->model('Book')->createBook([...$_POST, 'image_url' => $image]);
+                if ($bookId && $_POST['quantity'] > 0) $this->model('Book')->addBookCopies($bookId, $_POST['quantity']);
                 header('Location: ' . BASE_URL . '/book/adminIndex');
             }
         }
 
-        // Xóa sách
+        // Xử lý xóa (Delete)
         public function delete($id)
         {
             $this->model('Book')->deleteBook($id);
