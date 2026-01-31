@@ -84,22 +84,27 @@ class AuthController extends Controller
                 // Lấy user
                 $user = $userModel->getUserByUsername($username);
 
-                // Kiểm tra password
-                if ($user && password_verify($password, $user['password']) && $user['status'] === 'active') {
-                    // Set session
-                    $_SESSION['user_id'] = $user['user_id'];
-                    $_SESSION['username'] = $user['username'];
-                    $_SESSION['role'] = $user['role'];
-
-                    // Redirect dựa trên role
-                    if ($user['role'] === 'admin') {
-                        header('Location: ' . BASE_URL . '/admin/dashboard');
+                // Kiểm tra user tồn tại và password đúng
+                if ($user && password_verify($password, $user['password'])) {
+                    // Kiểm tra status
+                    if ($user['status'] !== 'active') {
+                        $error = "Your account has been locked. Please contact administrator.";
                     } else {
-                        header('Location: ' . BASE_URL . '/home');
+                        // Set session
+                        $_SESSION['user_id'] = $user['user_id'];
+                        $_SESSION['username'] = $user['username'];
+                        $_SESSION['role'] = $user['role'];
+
+                        // Redirect dựa trên role
+                        if ($user['role'] === 'admin') {
+                            header('Location: ' . BASE_URL . '/admin/dashboard');
+                        } else {
+                            header('Location: ' . BASE_URL . '/home');
+                        }
+                        exit;
                     }
-                    exit;
                 } else {
-                    $error = "Invalid username or password, or account is locked.";
+                    $error = "Invalid username or password.";
                 }
             }
 

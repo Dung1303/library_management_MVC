@@ -56,4 +56,73 @@ class AdminController extends Controller
         ];
         $this->view('admin/members', $data);
     }
-}
+
+    public function member($action = '', $id = '')
+    {
+        $userModel = $this->model('User');
+
+        if ($action === 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $result = $userModel->createMember([
+                'fullname' => $_POST['fullname'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'username' => $_POST['username'] ?? '',
+                'password' => $_POST['password'] ?? ''
+            ]);
+
+            if ($result) {
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            }
+        }
+
+        if ($action === 'edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $userId = $_POST['user_id'] ?? '';
+            $fullname = $_POST['fullname'] ?? '';
+            $email = $_POST['email'] ?? '';
+            
+            error_log('=== EDIT MEMBER DEBUG ===');
+            error_log('POST data: ' . print_r($_POST, true));
+            error_log('User ID: ' . $userId);
+            error_log('Fullname: ' . $fullname);
+            error_log('Email: ' . $email);
+            
+            if (empty($userId)) {
+                error_log('ERROR: User ID is empty!');
+                header('Location: ' . BASE_URL . '/admin/members?error=no_user_id');
+                exit;
+            }
+            
+            $data = [
+                'fullname' => $fullname,
+                'email' => $email
+            ];
+            
+            error_log('Calling updateMember with: ' . json_encode($data));
+            
+            $result = $userModel->updateMember($userId, $data);
+            
+            error_log('Update result: ' . ($result ? 'true' : 'false'));
+            error_log('=== END DEBUG ===');
+
+            if ($result) {
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            } else {
+                header('Location: ' . BASE_URL . '/admin/members?error=update_failed');
+                exit;
+            }
+        }
+
+        if ($action === 'toggle' && !empty($id)) {
+            $member = $userModel->getUserById($id);
+            if ($member) {
+                $newStatus = $member['status'] === 'active' ? 'locked' : 'active';
+                $userModel->updateMemberStatus($id, $newStatus);
+            }
+            header('Location: ' . BASE_URL . '/admin/members');
+            exit;
+        }
+
+        header('Location: ' . BASE_URL . '/admin/members');
+        exit;
+    }}

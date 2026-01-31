@@ -123,13 +123,13 @@ class User extends Model
         $stmt->execute([$user_id, $type]);
     }
 
-    // Lấy danh sách thành viên (member đang active)
+    // Lấy danh sách tất cả thành viên (active và locked)
     public function getAllMembers()
     {
         $stmt = $this->db->prepare("
             SELECT *
             FROM users
-            WHERE role = 'member' AND status = 'active'
+            WHERE role = 'member'
             ORDER BY full_name ASC
         ");
         $stmt->execute();
