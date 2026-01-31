@@ -63,4 +63,29 @@
                 'title' => 'Book Management'
             ]);
         }
+        // Thêm sách mới & Bản sao
+        public function store()
+        {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $image = "";
+                if (!empty($_FILES['image']['name'])) {
+                    $image = time() . '_' . $_FILES['image']['name'];
+                    move_uploaded_file($_FILES['image']['tmp_name'], 'public/uploads/' . $image);
+                }
+
+                $bookId = $this->model('Book')->createBook([
+                    'title' => $_POST['title'],
+                    'author' => $_POST['author'],
+                    'category_id' => $_POST['category_id'],
+                    'description' => $_POST['description'],
+                    'image_url' => $image
+                ]);
+
+                // Nếu tạo sách thành công, tạo luôn số lượng bản sao tương ứng
+                if ($bookId && $_POST['quantity'] > 0) {
+                    $this->model('Book')->addBookCopies($bookId, (int)$_POST['quantity']);
+                }
+                header('Location: ' . BASE_URL . '/book/adminIndex');
+            }
+        }
     }
