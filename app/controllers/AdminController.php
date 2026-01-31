@@ -50,8 +50,9 @@ class AdminController extends Controller
 
     public function members()
     {
+        $userModel = $this->model('User');
         $data = [
-            'members' => []
+            'members' => $userModel->getAllMembers()
         ];
         $this->view('admin/members', $data);
     }
