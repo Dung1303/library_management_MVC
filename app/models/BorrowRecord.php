@@ -53,6 +53,28 @@ class BorrowRecord extends Model
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+// Lấy toàn bộ lịch sử mượn (Admin)
+public function getAllBorrowHistory()
+{
+    $sql = "SELECT 
+                br.borrow_id,
+                u.full_name,
+                b.title,
+                bc.book_copy_id,
+                bc.barcode,
+                br.borrow_date,
+                br.due_date,
+                br.return_date,
+                br.status
+            FROM borrow_records br
+            JOIN users u ON br.user_id = u.user_id
+            JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+            JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+            JOIN books b ON bc.book_id = b.book_id
+            ORDER BY br.borrow_date DESC";
+
+    return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
 
     // Lấy thông tin chi tiết lịch sử mượn (theo borrow_id)
     public function getBorrowDetails($borrow_id)
@@ -106,4 +128,105 @@ class BorrowRecord extends Model
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'];
     }
+    // Lấy tất cả phiếu đang mượn (Admin)
+public function getAllActiveBorrows()
+{
+    $sql = "SELECT 
+                br.borrow_id,
+                u.full_name,
+                b.title,
+                bc.book_copy_id,
+                bc.barcode,
+                br.borrow_date,
+                br.due_date,
+                br.status
+            FROM borrow_records br
+            JOIN users u ON br.user_id = u.user_id
+            JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+            JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+            JOIN books b ON bc.book_id = b.book_id
+            WHERE br.status != 'returned'
+            ORDER BY br.due_date ASC";
+
+    return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Admin tạo phiếu mượn
+public function createBorrow($user_id, $borrow_date, $due_date)
+{
+    $stmt = $this->db->prepare(
+        "INSERT INTO borrow_records (user_id, borrow_date, due_date, status)
+         VALUES (?, ?, ?, 'borrowed')"
+    );
+    $stmt->execute([$user_id, $borrow_date, $due_date]);
+    return $this->db->lastInsertId();
+}
+
+public function addBorrowCopy($borrow_id, $book_copy_id)
+{
+    $stmt = $this->db->prepare(
+        "INSERT INTO borrow_records_book_copies (borrow_id, book_copy_id, is_returned)
+         VALUES (?, ?, 0)"
+    );
+    return $stmt->execute([$borrow_id, $book_copy_id]);
+}
+
+// Trả sách
+public function returnBook($borrow_id, $book_copy_id)
+{
+    try {
+        $this->db->beginTransaction();
+
+        $this->db->prepare(
+            "UPDATE borrow_records_book_copies 
+             SET is_returned = 1 
+             WHERE borrow_id = ? AND book_copy_id = ?"
+        )->execute([$borrow_id, $book_copy_id]);
+
+        $this->db->prepare(
+            "UPDATE book_copies 
+             SET status = 'available' 
+             WHERE book_copy_id = ?"
+        )->execute([$book_copy_id]);
+
+        $this->db->prepare(
+            "UPDATE borrow_records 
+             SET status = 'returned', return_date = NOW()
+             WHERE borrow_id = ?"
+        )->execute([$borrow_id]);
+
+        $this->db->commit();
+    } catch (Exception $e) {
+        $this->db->rollBack();
+        throw $e;
+    }
+}
+public function searchByMemberName($keyword)
+{
+    $sql = "
+        SELECT 
+            br.borrow_id,
+            u.full_name,
+            b.title,
+            bc.book_copy_id,
+            bc.barcode,
+            br.borrow_date,
+            br.due_date,
+            br.status
+        FROM borrow_records br
+        JOIN users u ON br.user_id = u.user_id
+        JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+        JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+        JOIN books b ON bc.book_id = b.book_id
+        WHERE u.full_name LIKE :keyword
+        ORDER BY br.borrow_date DESC
+    ";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([
+        ':keyword' => '%' . $keyword . '%'
+    ]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }

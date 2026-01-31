@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../layouts/header.php';
 
 // Tính toán thống kê
-$totalBorrows = count($currentBorrows) + count($borrowHistory);
+$totalBorrows =  count($borrowHistory);
 $overdueCount = 0;
 foreach ($currentBorrows as $borrow) {
     if ($borrow['status'] == 'overdue') {
