@@ -1,5 +1,5 @@
 <?php
-// app/views/admin/borrow.php
+// app/views/admin/create.php
 ?>
 
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin-borrow.css">
@@ -27,26 +27,17 @@
 
             <!-- Tabs -->
             <div class="borrow-tabs">
-                <a href="<?= BASE_URL ?>/borrow/index" class="btn <?= $mode === 'list' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/borrow/index" class="btn">
                     Borrowing
                 </a>
 
-                <a href="<?= BASE_URL ?>/borrow/history" class="btn <?= $mode === 'history' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/borrow/history" class="btn">
                     History
                 </a>
             </div>
 
             <!-- Right -->
             <div class="borrow-right">
-
-                <!-- Search -->
-                <form method="GET" class="borrow-search">
-                    <input type="text" name="keyword" placeholder="Search by member name..."
-                        value="<?= htmlspecialchars($keyword ?? '') ?>">
-                    <button type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
 
                 <!-- Create -->
                 <a href="<?= BASE_URL ?>/borrow/create" class="btn-create">
@@ -58,94 +49,7 @@
         </div>
     </div>
 
-    <!-- ================= CURRENT BORROWS ================= -->
-    <?php if ($mode === 'list'): ?>
-
-    <table class="borrow-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Member</th>
-                <th>Books</th>
-                <th>Barcodes</th>
-                <th>Borrow Date</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($borrows as $b): ?>
-            <tr class="<?= $b['status'] === 'overdue' ? 'overdue' : '' ?>">
-                <td><?= $b['borrow_id'] ?></td>
-                <td><?= htmlspecialchars($b['full_name']) ?></td>
-                <td><?= htmlspecialchars($b['titles']) ?></td>
-                <td><?= htmlspecialchars($b['barcodes']) ?></td>
-                <td><?= $b['borrow_date'] ?></td>
-                <td><?= $b['due_date'] ?></td>
-                <td>
-                    <?php if ($b['status'] === 'overdue'): ?>
-                    <span class="badge badge-danger">Overdue</span>
-                    <?php else: ?>
-                    <span class="badge badge-warning">Borrowing</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <form method="post" action="<?= BASE_URL ?>/borrow/returnBook">
-                        <input type="hidden" name="borrow_id" value="<?= $b['borrow_id'] ?>">
-                        <input type="hidden" name="book_copy_id" value="<?= $b['barcodes'] ?>">
-                        <button class="btn btn-success btn-sm">
-                            <i class="bi bi-check-circle"></i> Return
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <!-- ================= BORROW HISTORY ================= -->
-    <?php elseif ($mode === 'history'): ?>
-
-    <table class="borrow-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Member</th>
-                <th>Books</th>
-                <th>Barcodes</th>
-                <th>Borrow Date</th>
-                <th>Due Date</th>
-                <th>Return Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($borrows as $b): ?>
-            <tr>
-                <td><?= $b['borrow_id'] ?></td>
-                <td><?= htmlspecialchars($b['full_name']) ?></td>
-                <td><?= htmlspecialchars($b['titles']) ?></td>
-                <td><?= htmlspecialchars($b['barcodes']) ?></td>
-                <td><?= $b['borrow_date'] ?></td>
-                <td><?= $b['due_date'] ?></td>
-                <td><?= $b['return_date'] ?? '-' ?></td>
-                <td>
-                    <?php if ($b['status'] === 'returned'): ?>
-                    <span class="badge badge-success">Returned</span>
-                    <?php elseif ($b['status'] === 'overdue'): ?>
-                    <span class="badge badge-danger">Overdue</span>
-                    <?php else: ?>
-                    <span class="badge badge-warning">Borrowing</span>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
     <!-- ================= CREATE BORROW ================= -->
-    <?php elseif ($mode === 'create'): ?>
     <form style="max-height: 90vh; overflow: auto;" class="borrow-form" method="post" onsubmit="return validateForm()">
         <h3>Create New Borrow Slip</h3>
         <p class="subtitle">Assign multiple books to a member</p>
@@ -300,7 +204,5 @@
         return true;
     }
     </script>
-
-    <?php endif; ?>
 
 </div>

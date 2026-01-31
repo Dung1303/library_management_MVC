@@ -16,17 +16,27 @@ class BorrowController extends Controller
     $borrowModel = $this->model('BorrowRecord');
 
     $keyword = $_GET['keyword'] ?? '';
+    $page = (int) ($_GET['page'] ?? 1);
+    $page = max(1, $page); // Đảm bảo page >= 1
+    $limit = 10;
 
     if (!empty($keyword)) {
-        $borrows = $borrowModel->searchByMemberName($keyword);
+        $borrows = $borrowModel->searchByMemberName($keyword, $page, $limit);
+        $total = $borrowModel->countSearchByMemberName($keyword);
     } else {
-        $borrows = $borrowModel->getAllActiveBorrows();
+        $borrows = $borrowModel->getAllActiveBorrows($page, $limit);
+        $total = $borrowModel->countAllActiveBorrows();
     }
 
-    $this->view('admin/borrow', [
-        'mode'    => 'list',
+    $totalPages = ceil($total / $limit);
+
+    $this->view('admin/borrowing', [
         'borrows' => $borrows,
-        'keyword' => $keyword   
+        'keyword' => $keyword,
+        'page' => $page,
+        'totalPages' => $totalPages,
+        'total' => $total,
+        'limit' => $limit
     ]);
 }
 
@@ -35,9 +45,20 @@ class BorrowController extends Controller
 {
     $borrowModel = $this->model('BorrowRecord');
 
-    $this->view('admin/borrow', [
-        'mode'    => 'history',
-        'borrows' => $borrowModel->getAllBorrowHistory()
+    $page = (int) ($_GET['page'] ?? 1);
+    $page = max(1, $page); // Đảm bảo page >= 1
+    $limit = 10;
+
+    $borrows = $borrowModel->getAllBorrowHistory($page, $limit);
+    $total = $borrowModel->countAllBorrowHistory();
+    $totalPages = ceil($total / $limit);
+
+    $this->view('admin/history', [
+        'borrows' => $borrows,
+        'page' => $page,
+        'totalPages' => $totalPages,
+        'total' => $total,
+        'limit' => $limit
     ]);
 }
 
@@ -96,11 +117,9 @@ public function create()
     $members = $userModel->getAllMembers();
     $books   = $bookModel->getBooksHaveAvailable();
 
-    $this->view('admin/borrow', [
-        'mode'    => 'create',
+    $this->view('admin/create', [
         'members' => $members,
-        'books'   => $books,
-        'copies'  => []
+        'books'   => $books
     ]);
 }
 
