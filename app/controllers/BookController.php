@@ -88,4 +88,29 @@
                 header('Location: ' . BASE_URL . '/book/adminIndex');
             }
         }
+        // Cập nhật sách
+        public function update($id)
+        {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $data = [
+                    'title' => $_POST['title'],
+                    'author' => $_POST['author'],
+                    'category_id' => $_POST['category_id'],
+                    'description' => $_POST['description']
+                ];
+                if (!empty($_FILES['image']['name'])) {
+                    $data['image_url'] = time() . '_' . $_FILES['image']['name'];
+                    move_uploaded_file($_FILES['image']['tmp_name'], 'public/uploads/' . $data['image_url']);
+                }
+                $this->model('Book')->updateBook($id, $data);
+                header('Location: ' . BASE_URL . '/book/adminIndex');
+            }
+        }
+
+        // Xóa sách
+        public function delete($id)
+        {
+            $this->model('Book')->deleteBook($id);
+            header('Location: ' . BASE_URL . '/book/adminIndex');
+        }
     }
