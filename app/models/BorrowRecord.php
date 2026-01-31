@@ -59,18 +59,18 @@ public function getAllBorrowHistory()
     $sql = "SELECT 
                 br.borrow_id,
                 u.full_name,
-                b.title,
-                bc.book_copy_id,
-                bc.barcode,
+                GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ') as titles,
+                GROUP_CONCAT(DISTINCT bc.barcode SEPARATOR ', ') as barcodes,
                 br.borrow_date,
                 br.due_date,
                 br.return_date,
                 br.status
             FROM borrow_records br
             JOIN users u ON br.user_id = u.user_id
-            JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
-            JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
-            JOIN books b ON bc.book_id = b.book_id
+            LEFT JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+            LEFT JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+            LEFT JOIN books b ON bc.book_id = b.book_id
+            GROUP BY br.borrow_id, u.full_name, br.borrow_date, br.due_date, br.return_date, br.status
             ORDER BY br.borrow_date DESC";
 
     return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -134,18 +134,18 @@ public function getAllActiveBorrows()
     $sql = "SELECT 
                 br.borrow_id,
                 u.full_name,
-                b.title,
-                bc.book_copy_id,
-                bc.barcode,
+                GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ') as titles,
+                GROUP_CONCAT(DISTINCT bc.barcode SEPARATOR ', ') as barcodes,
                 br.borrow_date,
                 br.due_date,
                 br.status
             FROM borrow_records br
             JOIN users u ON br.user_id = u.user_id
-            JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
-            JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
-            JOIN books b ON bc.book_id = b.book_id
+            LEFT JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+            LEFT JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+            LEFT JOIN books b ON bc.book_id = b.book_id
             WHERE br.status != 'returned'
+            GROUP BY br.borrow_id, u.full_name, br.borrow_date, br.due_date, br.status
             ORDER BY br.due_date ASC";
 
     return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);

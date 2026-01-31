@@ -270,3 +270,78 @@
 .borrow-form .btn-block:hover {
     background: #1d4ed8;
 }
+/* =========================
+   SELECTED BOOKS LIST
+========================= */
+
+.selected-books-list {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    background-color: #f9f9f9;
+}
+
+.selected-book-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.selected-book-item:last-child {
+    margin-bottom: 0;
+}
+
+.selected-book-item span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.selected-book-item .btn-remove {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.selected-book-item .btn-remove:hover {
+    background: #c82333;
+}
+
+.empty-message {
+    color: #999;
+    font-style: italic;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* =========================
+   BUTTON SECONDARY
+========================= */
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}

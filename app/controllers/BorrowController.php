@@ -26,7 +26,7 @@ class BorrowController extends Controller
     $this->view('admin/borrow', [
         'mode'    => 'list',
         'borrows' => $borrows,
-        'keyword' => $keyword   // ⭐ DÒNG QUAN TRỌNG
+        'keyword' => $keyword   
     ]);
 }
 
@@ -54,28 +54,37 @@ public function create()
     // ======================
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $userId   = $_POST['user_id'];
-        $copyId   = $_POST['book_copy_id'];
-        $dueDate  = $_POST['due_date'];
+        $userId     = $_POST['user_id'];
+        $copyIdsStr = $_POST['book_copy_ids'] ?? ''; // Chuỗi các book_copy_id (ví dụ: "1,2,3")
+        $copyIds    = array_filter(array_map('trim', explode(',', $copyIdsStr))); // Parse thành mảng
+        $dueDate    = $_POST['due_date'];
         $borrowDate = date('Y-m-d');
 
+        // Validate
+        if (empty($userId)) {
+            die('Vui lòng chọn thành viên');
+        }
+        if (empty($copyIds)) {
+            die('Vui lòng chọn ít nhất 1 quyển sách');
+        }
         if ($dueDate <= $borrowDate) {
             die('Hạn trả không hợp lệ');
         }
 
+        // Tạo phiếu mượn
         $borrowId = $borrowModel->createBorrow(
             $userId,
             $borrowDate,
             $dueDate
         );
 
-        $borrowModel->addBorrowCopy($borrowId, $copyId);
-        $copyModel->updateStatus($copyId, 'borrowed');
-$copyId = $_POST['book_copy_id'];
-
-if (empty($copyId) || !is_numeric($copyId)) {
-    die('Vui lòng chọn bản sao hợp lệ');
-}
+        // Thêm tất cả sách vào phiếu mượn
+        foreach ($copyIds as $copyId) {
+            if (!empty($copyId) && is_numeric($copyId)) {
+                $borrowModel->addBorrowCopy($borrowId, $copyId);
+                $copyModel->updateStatus($copyId, 'borrowed');
+            }
+        }
 
         header('Location: ' . BASE_URL . '/admin/index');
         exit;
