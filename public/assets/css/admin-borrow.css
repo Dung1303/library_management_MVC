@@ -3,10 +3,15 @@
 ========================= */
 
 .borrow-container {
-    padding: 24px 28px;
-    background: #eef5ff;
-    min-height: 100vh;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 24px 28px;
+  background: #eef5ff;
+  min-height: 100vh;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 /* =========================
@@ -14,39 +19,39 @@
 ========================= */
 
 .borrow-header {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 
 /* ---- Back ---- */
 .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: #1f2937;
-    text-decoration: none;
-    width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #1f2937;
+  text-decoration: none;
+  width: fit-content;
 }
 
 .btn-back:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* ---- Title ---- */
 .borrow-title h2 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: #dc2626; /* đỏ như ảnh */
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #dc2626; /* đỏ như ảnh */
 }
 
 .borrow-title p {
-    margin: 4px 0 0;
-    font-size: 14px;
-    color: #6b7280;
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b7280;
 }
 
 /* =========================
@@ -54,80 +59,80 @@
 ========================= */
 
 .borrow-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 /* ---- Tabs ---- */
 .borrow-tabs {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .borrow-tabs .btn {
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    background: #ffffff;
-    color: #111827;
-    text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #ffffff;
+  color: #111827;
+  text-decoration: none;
 }
 
 .borrow-tabs .btn.active {
-    background: #4cc3e6;
-    color: #ffffff;
+  background: #4cc3e6;
+  color: #ffffff;
 }
 
 /* ---- Right actions ---- */
 .borrow-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 /* ---- Search ---- */
 .borrow-search {
-    display: flex;
-    align-items: center;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 6px 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .borrow-search input {
-    border: none;
-    outline: none;
-    font-size: 14px;
-    width: 260px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 260px;
 }
 
 .borrow-search button {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 /* ---- Create button ---- */
 .btn-create {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    background: #000000;
-    color: #ffffff;
-    border-radius: 18px;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
 }
 
 .btn-create:hover {
-    background: #111827;
+  background: #111827;
 }
 
 /* =========================
@@ -135,29 +140,29 @@
 ========================= */
 
 .borrow-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .borrow-table th,
 .borrow-table td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #e5e7eb;
-    text-align: left;
-    font-size: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-size: 14px;
 }
 
 .borrow-table th {
-    background: #1f2937;
-    color: #ffffff;
-    font-weight: 600;
+  background: #1f2937;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .borrow-table tr.overdue {
-    background: #fff3f3;
+  background: #fff3f3;
 }
 
 /* =========================
@@ -165,25 +170,25 @@
 ========================= */
 
 .badge {
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .badge-warning {
-    background: #fde68a;
-    color: #92400e;
+  background: #fde68a;
+  color: #92400e;
 }
 
 .badge-success {
-    background: #bbf7d0;
-    color: #166534;
+  background: #bbf7d0;
+  color: #166534;
 }
 
 .badge-danger {
-    background: #fecaca;
-    color: #7f1d1d;
+  background: #fecaca;
+  color: #7f1d1d;
 }
 
 /* =========================
@@ -191,138 +196,138 @@
 ========================= */
 
 .borrow-form {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 420px;
-    max-width: 92%;
-    background: #ffffff;
-    padding: 26px 28px;
-    border-radius: 16px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-    z-index: 9999;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  max-width: 92%;
+  background: #ffffff;
+  padding: 26px 28px;
+  border-radius: 16px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
 }
 
 /* ---- Form text ---- */
 
 .borrow-form h3 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #111827;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .borrow-form .subtitle {
-    margin-top: 6px;
-    margin-bottom: 18px;
-    font-size: 14px;
-    color: #6b7280;
+  margin-top: 6px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: #6b7280;
 }
 
 /* ---- Fields ---- */
 
 .borrow-form .form-group {
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .borrow-form label {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 6px;
-    display: block;
-    color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  color: #374151;
 }
 
 .borrow-form select,
 .borrow-form input[type="date"] {
-    width: 100%;
-    height: 42px;
-    padding: 0 14px;
-    border-radius: 12px;
-    border: none;
-    background: #f1f5f9;
-    font-size: 14px;
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: none;
+  background: #f1f5f9;
+  font-size: 14px;
 }
 
 .borrow-form select:focus,
 .borrow-form input[type="date"]:focus {
-    background: #e0f2fe;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.35);
-    outline: none;
+  background: #e0f2fe;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.35);
+  outline: none;
 }
 
 /* ---- Submit ---- */
 
 .borrow-form .btn-block {
-    margin-top: 10px;
-    height: 44px;
-    width: 100%;
-    border-radius: 12px;
-    background: #2563eb;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
+  margin-top: 10px;
+  height: 44px;
+  width: 100%;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
 }
 
 .borrow-form .btn-block:hover {
-    background: #1d4ed8;
+  background: #1d4ed8;
 }
 /* =========================
    SELECTED BOOKS LIST
 ========================= */
 
 .selected-books-list {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 8px;
-    background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  background-color: #f9f9f9;
 }
 
 .selected-book-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 8px;
 }
 
 .selected-book-item:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .selected-book-item span {
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
 }
 
 .selected-book-item .btn-remove {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background 0.3s;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s;
 }
 
 .selected-book-item .btn-remove:hover {
-    background: #c82333;
+  background: #c82333;
 }
 
 .empty-message {
-    color: #999;
-    font-style: italic;
-    margin: 0;
-    font-size: 14px;
+  color: #999;
+  font-style: italic;
+  margin: 0;
+  font-size: 14px;
 }
 
 /* =========================
@@ -330,20 +335,20 @@
 ========================= */
 
 .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.3s;
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.3s;
 }
 
 .btn-secondary:hover {
-    background-color: #5a6268;
+  background-color: #5a6268;
 }
 
 /* =========================
@@ -351,46 +356,46 @@
 ========================= */
 
 .pagination {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .btn-page {
-    padding: 8px 12px;
-    background-color: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.3s;
-    border: none;
-    cursor: pointer;
+  padding: 8px 12px;
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-page:hover {
-    background-color: #1d4ed8;
+  background-color: #1d4ed8;
 }
 
 .page-current {
-    padding: 8px 12px;
-    background-color: #10b981;
-    color: white;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
+  padding: 8px 12px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .pagination-info {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 13px;
-    color: #666;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #666;
 }

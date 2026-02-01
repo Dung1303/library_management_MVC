@@ -1,0 +1,17 @@
+{
+    "name": "admin/library_management_mvc",
+    "autoload": {
+        "psr-4": {
+            "Admin\\LibraryManagementMvc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tungominh",
+            "email": "minhtu080906@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^5.4"
+    }
+}
