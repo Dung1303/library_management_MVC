@@ -39,6 +39,14 @@ class AdminController extends Controller
         ]);
     }
 
+    public function members()
+    {
+        $userModel = $this->model('User');
+        $data = [
+            'members' => $userModel->getAllMembers()
+        ];
+        $this->view('admin/members', $data);
+    }
 
     public function member($action = '', $id = '')
     {
@@ -266,9 +274,10 @@ class AdminController extends Controller
                         $category = trim($row[2] ?? '');
                         $quantity = (int)($row[3] ?? 0);
                         $description = trim($row[4] ?? '');
+                        $imageUrl = trim($row[5] ?? 'default-book.png');
 
                         if (!empty($title) && $quantity > 0) {
-                            if ($bookModel->importBook($title, $author, $category, $quantity, $description)) {
+                            if ($bookModel->importBook($title, $author, $category, $quantity, $description, $imageUrl)) {
                                 $countSuccess++;
                             }
                         }

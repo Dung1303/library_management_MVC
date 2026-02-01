@@ -26,13 +26,15 @@
 
             <div style="margin-bottom: 20px;">
 
-                <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">Description
+                <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">
+                    Description
 
                     <h5 style="color: var(--text-dark); font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">
 
                     </h5>
                     <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">
-                        <?= nl2br(htmlspecialchars($book['Description'] ?? 'No description available for this book.')) ?></p>
+                        <?= nl2br(htmlspecialchars($book['Description'] ?? 'No description available for this book.')) ?>
+                    </p>
             </div>
 
             <div class="stock-status"
@@ -60,5 +62,7 @@
         </div>
     </div>
 </div>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

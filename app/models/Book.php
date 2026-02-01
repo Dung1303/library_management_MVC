@@ -173,7 +173,7 @@ class Book extends Model
     }
 
     // 5. Import sách từ Excel (Xử lý Transaction)
-    public function importBook($title, $author, $categoryName, $quantity, $description)
+    public function importBook($title, $author, $categoryName, $quantity, $description, $imageUrl = 'default-book.png')
     {
         try {
             $this->db->beginTransaction();
@@ -206,13 +206,14 @@ class Book extends Model
             } else {
                 // Sách chưa tồn tại -> Thêm mới vào bảng books
                 $sql = "INSERT INTO books (title, author, category_id, Description, image_url) 
-                        VALUES (:title, :author, :category_id, :description, '')";
+                        VALUES (:title, :author, :category_id, :description, :image_url)";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
                     ':title' => $title,
                     ':author' => $author,
                     ':category_id' => $categoryId,
-                    ':description' => $description
+                    ':description' => $description,
+                    ':image_url' => $imageUrl
                 ]);
                 $bookId = $this->db->lastInsertId();
             }
