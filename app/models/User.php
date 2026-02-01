@@ -122,17 +122,63 @@ class User extends Model
         ");
         $stmt->execute([$user_id, $type]);
     }
-    // Lấy danh sách thành viên (member đang active)
-public function getAllMembers()
-{
-    $stmt = $this->db->prepare("
-        SELECT user_id, full_name, email
-        FROM users
-        WHERE role = 'member' AND status = 'active'
-        ORDER BY full_name ASC
-    ");
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
+    // Lấy danh sách tất cả thành viên (active và locked)
+    public function getAllMembers()
+    {
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM users
+            WHERE role = 'member'
+            ORDER BY full_name ASC
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Hàm tạo thành viên mới (admin)
+    public function createMember($data)
+    {
+        $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+        
+        $stmt = $this->db->prepare("
+            INSERT INTO users (username, password, full_name, email, role, status) 
+            VALUES (?, ?, ?, ?, 'member', 'active')
+        ");
+        
+        return $stmt->execute([
+            $data['username'] ?? $data['fullname'],
+            $hashedPassword,
+            $data['fullname'],
+            $data['email']
+        ]);
+    }
+
+    // Hàm cập nhật thành viên
+    public function updateMember($id, $data)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET full_name = ?, email = ? 
+            WHERE user_id = ?
+        ");
+        
+        return $stmt->execute([
+            $data['fullname'],
+            $data['email'],
+            $id
+        ]);
+    }
+
+    // Hàm cập nhật status của member
+    public function updateMemberStatus($id, $newStatus)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET status = ? 
+            WHERE user_id = ?
+        ");
+        
+        return $stmt->execute([$newStatus, $id]);
+    }
 }
