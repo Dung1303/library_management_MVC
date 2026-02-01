@@ -26,6 +26,20 @@ class Book extends Model
         return $result['total'];
     }
 
+    public function getTotalCopiesCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM book_copies";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    public function getAvailableCopiesCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM book_copies WHERE status = 'available'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
     public function getBookById($id)
     {
         $sql = "SELECT b.*, c.category_name, 
@@ -40,5 +54,21 @@ class Book extends Model
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    // Lấy danh sách sách còn bản sao có thể mượn
+    public function getBooksHaveAvailable()
+    {
+        $sql = "
+        SELECT DISTINCT b.book_id, b.title
+        FROM books b
+        INNER JOIN book_copies bc ON b.book_id = bc.book_id
+        WHERE bc.status = 'available'
+        ORDER BY b.title ASC
+    ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

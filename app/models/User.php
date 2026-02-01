@@ -61,7 +61,7 @@ class User extends Model
     {
         $stmt = $this->db->prepare("SELECT user_id FROM users WHERE username = ?");
         $stmt->execute([$username]);
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -77,7 +77,7 @@ class User extends Model
             $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
             $stmt->execute([$email]);
         }
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -89,8 +89,16 @@ class User extends Model
             SET full_name = ?, email = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$full_name, $email, $user_id]);
+    }
+
+    // Hàm lấy tổng số users (thành viên hoạt động)
+    public function getTotalUsersCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'member'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
     }
 
     // Hàm cập nhật mật khẩu user
@@ -101,7 +109,7 @@ class User extends Model
             SET password = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$hashed_password, $user_id]);
     }
 
@@ -113,5 +121,17 @@ class User extends Model
             VALUES (?, ?, CURRENT_TIMESTAMP, 'sent')
         ");
         $stmt->execute([$user_id, $type]);
+    }
+    // Lấy danh sách thành viên (member đang active)
+    public function getAllMembers()
+    {
+        $stmt = $this->db->prepare("
+        SELECT user_id, full_name, email
+        FROM users
+        WHERE role = 'member' AND status = 'active'
+        ORDER BY full_name ASC
+    ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
