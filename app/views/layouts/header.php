@@ -35,7 +35,7 @@
                     </li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-primary" href="<?= BASE_URL ?>/admin/dashboard">Management</a>
+                        <a class="nav-link  " href="<?= BASE_URL ?>/admin/dashboard">Management</a>
                     </li>
                     <?php else: ?>
                     <li class="nav-item">
@@ -51,7 +51,7 @@
                     <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="text-end">
                         <div class="fw-semibold">
-                            <?= htmlspecialchars( $_SESSION['username']); ?>
+                            <?= htmlspecialchars($_SESSION['username']); ?>
                         </div>
                         <small class="text-muted"><?= ucfirst($_SESSION['role'] ?? 'Member'); ?></small>
                     </div>
