@@ -61,7 +61,7 @@ class User extends Model
     {
         $stmt = $this->db->prepare("SELECT user_id FROM users WHERE username = ?");
         $stmt->execute([$username]);
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -77,7 +77,7 @@ class User extends Model
             $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
             $stmt->execute([$email]);
         }
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -89,7 +89,7 @@ class User extends Model
             SET full_name = ?, email = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$full_name, $email, $user_id]);
     }
 
@@ -109,7 +109,7 @@ class User extends Model
             SET password = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$hashed_password, $user_id]);
     }
 
@@ -140,12 +140,12 @@ class User extends Model
     public function createMember($data)
     {
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
-        
+
         $stmt = $this->db->prepare("
             INSERT INTO users (username, password, full_name, email, role, status) 
             VALUES (?, ?, ?, ?, 'member', 'active')
         ");
-        
+
         return $stmt->execute([
             $data['username'] ?? $data['fullname'],
             $hashedPassword,
@@ -162,7 +162,7 @@ class User extends Model
             SET full_name = ?, email = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([
             $data['fullname'],
             $data['email'],
@@ -178,7 +178,7 @@ class User extends Model
             SET status = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$newStatus, $id]);
     }
 }
