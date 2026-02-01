@@ -1,7 +1,7 @@
 <?php
 class Book extends Model
 {
-    public function getAllBooks($limit = 15, $offset = 0)
+    public function getAllBooks($limit = 12, $offset = 0)
     {
         // SQL JOIN để lấy thông tin sách, tên danh mục và đếm số bản sao
         $sql = "SELECT b.*, c.category_name, 
@@ -79,8 +79,6 @@ class Book extends Model
             $sql = "INSERT INTO books (title, author, category_id, Description, image_url) 
                     VALUES (:title, :author, :category_id, :description, :image_url)";
 
-            error_log("SQL Query: " . $sql);
-
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':title', $data['title']);
             $stmt->bindValue(':author', $data['author']);
@@ -88,14 +86,10 @@ class Book extends Model
             $stmt->bindValue(':description', $data['description']);
             $stmt->bindValue(':image_url', $data['image_url']);
 
-            error_log("Executing query...");
-
             if ($stmt->execute()) {
                 $lastId = $this->db->lastInsertId();
-                error_log("Query successful! Last Insert ID: " . $lastId);
                 return $lastId; // Trả về ID sách vừa tạo
             }
-            error_log("Query failed!");
             return false;
         } catch (PDOException $e) {
             error_log("PDOException: " . $e->getMessage());
@@ -106,12 +100,28 @@ class Book extends Model
     // 2. Tạo các bản sao sách (Book Copies) dựa trên số lượng nhập vào
     public function addBookCopies($bookId, $quantity)
     {
-        $sql = "INSERT INTO book_copies (book_id, status) VALUES (:book_id, 'available')";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':book_id', $bookId);
+        // Đếm số lượng bản sao hiện có của sách này để xác định số thứ tự tiếp theo.
+        $countSql = "SELECT COUNT(*) FROM book_copies WHERE book_id = :book_id";
+        $countStmt = $this->db->prepare($countSql);
+        $countStmt->execute([':book_id' => $bookId]);
+        $currentCopyCount = (int)$countStmt->fetchColumn();
 
-        for ($i = 0; $i < $quantity; $i++) {
-            $stmt->execute();
+        $sqlInsert = "INSERT INTO book_copies (book_id, status) VALUES (:book_id, 'available')";
+        $stmtInsert = $this->db->prepare($sqlInsert);
+        $stmtInsert->bindValue(':book_id', $bookId);
+
+        $sqlUpdate = "UPDATE book_copies SET barcode = :barcode WHERE book_copy_id = :copy_id";
+        $stmtUpdate = $this->db->prepare($sqlUpdate);
+
+        for ($i = 1; $i <= $quantity; $i++) {
+            $stmtInsert->execute();
+            // Lấy ID của bản sao vừa tạo
+            $copyId = $this->db->lastInsertId();
+            // Tạo barcode dựa trên số thứ tự của bản sao
+            $copyNumber = $currentCopyCount + $i;
+            $barcode = "BC-{$bookId}-{$copyNumber}";
+            // Cập nhật lại dòng vừa tạo với barcode mới
+            $stmtUpdate->execute([':barcode' => $barcode, ':copy_id' => $copyId]);
         }
     }
 
@@ -127,7 +137,7 @@ class Book extends Model
                 $sql .= ", image_url = :image_url";
             }
 
-            $sql .= " WHERE book_id = :book_id";
+            $sql .= " WHERE book_id = :book_id"; // nối chuỗi 
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':title', $data['title']);
@@ -219,12 +229,26 @@ class Book extends Model
             }
 
             // C. Thêm các bản sao (Copies) dựa trên quantity
-            $sqlCopy = "INSERT INTO book_copies (book_id, status) VALUES (:book_id, 'available')";
-            $stmtCopy = $this->db->prepare($sqlCopy);
-            $stmtCopy->bindValue(':book_id', $bookId);
+            // Đếm số lượng bản sao hiện có của sách này để xác định số thứ tự tiếp theo.
+            $countSql = "SELECT COUNT(*) FROM book_copies WHERE book_id = :book_id";
+            $countStmt = $this->db->prepare($countSql);
+            $countStmt->execute([':book_id' => $bookId]);
+            $currentCopyCount = (int)$countStmt->fetchColumn();
 
-            for ($i = 0; $i < $quantity; $i++) {
-                $stmtCopy->execute();
+            $sqlInsert = "INSERT INTO book_copies (book_id, status) VALUES (:book_id, 'available')";
+            $stmtInsert = $this->db->prepare($sqlInsert);
+            $stmtInsert->bindValue(':book_id', $bookId);
+
+            $sqlUpdate = "UPDATE book_copies SET barcode = :barcode WHERE book_copy_id = :copy_id";
+            $stmtUpdate = $this->db->prepare($sqlUpdate);
+
+            for ($i = 1; $i <= $quantity; $i++) {
+                $stmtInsert->execute();
+                $copyId = $this->db->lastInsertId();
+                // Tạo barcode dựa trên số thứ tự của bản sao
+                $copyNumber = $currentCopyCount + $i;
+                $barcode = "BC-{$bookId}-{$copyNumber}";
+                $stmtUpdate->execute([':barcode' => $barcode, ':copy_id' => $copyId]);
             }
 
             $this->db->commit();
