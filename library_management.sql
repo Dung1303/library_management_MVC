@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2026 at 06:09 PM
+-- Generation Time: Feb 01, 2026 at 02:31 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -84,7 +84,7 @@ INSERT INTO `book_copies` (`book_copy_id`, `book_id`, `status`, `barcode`) VALUE
 (2, 1, 'available', 'BC-1-2'),
 (3, 1, 'available', 'BC-1-3'),
 (4, 2, 'available', 'BC-2-1'),
-(5, 2, 'available', 'BC-2-2'),
+(5, 2, 'borrowed', 'BC-2-2'),
 (6, 2, 'available', 'BC-2-3'),
 (7, 6, 'available', 'BC-6-1'),
 (8, 6, 'available', 'BC-6-2'),

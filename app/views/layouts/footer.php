@@ -18,9 +18,9 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold">Contact Information</h5>
                 <ul class="list-unstyled">
-                    <li>📍 Hanoi, Vietnam</li>
-                    <li>📧 librasys@gmail.com</li>
-                    <li>📞 +84 123 456 789</li>
+                    <li> Danang, Vietnam</li>
+                    <li> librasys@gmail.com</li>
+                    <li> +84 123 456 789</li>
                 </ul>
             </div>
 
@@ -41,9 +41,9 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold">Branches</h5>
                 <ul class="list-unstyled">
-                    <li>🏢 Hanoi</li>
-                    <li>🏢 Ho Chi Minh City</li>
-                    <li>🏢 Da Nang</li>
+                    <li> Hanoi</li>
+                    <li> Ho Chi Minh City</li>
+                    <li> Da Nang</li>
                 </ul>
             </div>
 

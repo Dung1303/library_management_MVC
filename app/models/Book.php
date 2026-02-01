@@ -57,6 +57,21 @@ class Book extends Model
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function getBooksHaveAvailable()
+    {
+        $sql = "
+        SELECT DISTINCT b.book_id, b.title
+        FROM books b
+        INNER JOIN book_copies bc ON b.book_id = bc.book_id
+        WHERE bc.status = 'available'
+        ORDER BY b.title ASC
+    ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     // 1. Thêm sách mới
     public function addBook($data)
     {

@@ -179,48 +179,75 @@ class BorrowRecord extends Model
         return $result['total'];
     }
 
-    // Admin tạo phiếu mượn
-    public function createBorrow($user_id, $borrow_date, $due_date)
-    {
-        $stmt = $this->db->prepare(
-            "INSERT INTO borrow_records (user_id, borrow_date, due_date, status)
-         VALUES (?, ?, ?, 'borrowed')"
-        );
-        $stmt->execute([$user_id, $borrow_date, $due_date]);
-        return $this->db->lastInsertId();
-    }
-
-    public function addBorrowCopy($borrow_id, $book_copy_id)
-    {
-        $stmt = $this->db->prepare(
-            "INSERT INTO borrow_records_book_copies (borrow_id, book_copy_id, is_returned)
-         VALUES (?, ?, 0)"
-        );
-        return $stmt->execute([$borrow_id, $book_copy_id]);
-    }
-
-    // Trả sách
-    public function returnBook($borrow_id, $book_copy_id)
+    // Admin tạo phiếu mượn (Có Transaction an toàn)
+    public function createBorrowWithCopies($user_id, $borrow_date, $due_date, $copyIds)
     {
         try {
             $this->db->beginTransaction();
 
-            $this->db->prepare(
-                "UPDATE borrow_records_book_copies 
-             SET is_returned = 1 
-             WHERE borrow_id = ? AND book_copy_id = ?"
-            )->execute([$borrow_id, $book_copy_id]);
+            // 1. Tạo phiếu mượn
+            $stmt = $this->db->prepare(
+                "INSERT INTO borrow_records (user_id, borrow_date, due_date, status)
+                 VALUES (?, ?, ?, 'borrowed')"
+            );
+            $stmt->execute([$user_id, $borrow_date, $due_date]);
+            $borrowId = $this->db->lastInsertId();
 
-            $this->db->prepare(
-                "UPDATE book_copies 
-             SET status = 'available' 
-             WHERE book_copy_id = ?"
-            )->execute([$book_copy_id]);
+            // 2. Thêm chi tiết mượn và Cập nhật trạng thái sách
+            $sqlInsert = "INSERT INTO borrow_records_book_copies (borrow_id, book_copy_id, is_returned) VALUES (?, ?, 0)";
+            $stmtInsert = $this->db->prepare($sqlInsert);
 
+            $sqlUpdate = "UPDATE book_copies SET status = 'borrowed' WHERE book_copy_id = ?";
+            $stmtUpdate = $this->db->prepare($sqlUpdate);
+
+            foreach ($copyIds as $copyId) {
+                if (!empty($copyId) && is_numeric($copyId)) {
+                    $stmtInsert->execute([$borrowId, $copyId]);
+                    $stmtUpdate->execute([$copyId]);
+                }
+            }
+
+            $this->db->commit();
+            return $borrowId;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return false;
+        }
+    }
+
+    // Trả sách
+    public function returnBorrow($borrow_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Lấy danh sách các bản sao sách trong phiếu này mà chưa trả
+            $stmt = $this->db->prepare("
+                SELECT book_copy_id 
+                FROM borrow_records_book_copies 
+                WHERE borrow_id = ? AND is_returned = 0
+            ");
+            $stmt->execute([$borrow_id]);
+            $copies = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            if (!empty($copies)) {
+                // 2. Cập nhật trạng thái sách -> 'available' (Cộng lại số lượng vật lý)
+                // Tạo chuỗi placeholder (?,?,?)
+                $placeholders = implode(',', array_fill(0, count($copies), '?'));
+                $sqlBookCopies = "UPDATE book_copies SET status = 'available' WHERE book_copy_id IN ($placeholders)";
+                $this->db->prepare($sqlBookCopies)->execute($copies);
+
+                // 3. Đánh dấu trong bảng chi tiết là đã trả
+                // Chỉ cập nhật những cuốn vừa tìm thấy (để an toàn hơn)
+                $sqlMarkReturned = "UPDATE borrow_records_book_copies SET is_returned = 1 WHERE borrow_id = ? AND book_copy_id IN ($placeholders)";
+                // Merge mảng tham số: [borrow_id, copy1, copy2...]
+                $params = array_merge([$borrow_id], $copies);
+                $this->db->prepare($sqlMarkReturned)->execute($params);
+            }
+
+            // 4. Cập nhật trạng thái phiếu mượn -> 'returned'
             $this->db->prepare(
-                "UPDATE borrow_records 
-             SET status = 'returned', return_date = NOW()
-             WHERE borrow_id = ?"
+                "UPDATE borrow_records SET status = 'returned', return_date = NOW() WHERE borrow_id = ?"
             )->execute([$borrow_id]);
 
             $this->db->commit();
