@@ -6,7 +6,7 @@
             $bookModel = $this->model('Book');
             $categoryModel = $this->model('Category');
 
-            $limit = 15;
+            $limit = 12;
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $offset = ($page - 1) * $limit;
 

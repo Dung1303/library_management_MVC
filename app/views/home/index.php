@@ -34,21 +34,19 @@ require_once __DIR__ . '/../layouts/header.php';
                 <?php foreach ($books as $book): ?>
                     <div class="book-card">
                         <div class="book-image">
-                            <img src="<?= BASE_URL ?>/assets/images/<?= $book['image_url'] ?>" alt="Cover" style="width:100%">
                             <?php
                             $imgName = $book['image_url'] ?? 'default-book.png';
                             // Logic kiểm tra ảnh: Ưu tiên Uploads -> Assets -> Mặc định
-                            if (!empty($imgName) && file_exists(__DIR__ . '/../../public/uploads/books/' . $imgName)) {
+                            if (!empty($imgName) && file_exists(__DIR__ . '/../../../public/uploads/books/' . $imgName)) {
                                 $imgPath = 'uploads/books/' . $imgName;
-                            } elseif (!empty($imgName) && file_exists(__DIR__ . '/../../public/assets/images/' . $imgName)) {
+                            } elseif (!empty($imgName) && file_exists(__DIR__ . '/../../../public/assets/images/' . $imgName)) {
                                 $imgPath = 'assets/images/' . $imgName;
                             } else {
                                 $imgPath = 'assets/images/default-book.png';
                             }
                             ?>
-                            <img src="<?= BASE_URL ?>/<?= $imgPath ?>" alt="Cover"
-                                style="width:100%; height: 300px; object-fit: cover;">
-
+                            <img src="<?= BASE_URL ?>/<?= $imgPath ?>" alt="<?= htmlspecialchars($book['title']) ?>"
+                                style="width:100%">
                             <?php if ($book['available'] <= 0): ?>
                                 <div class="out-of-stock-badge">Out of Stock</div>
                             <?php endif; ?>

@@ -71,14 +71,7 @@ class AdminController extends Controller
             $fullname = $_POST['fullname'] ?? '';
             $email = $_POST['email'] ?? '';
 
-            error_log('=== EDIT MEMBER DEBUG ===');
-            error_log('POST data: ' . print_r($_POST, true));
-            error_log('User ID: ' . $userId);
-            error_log('Fullname: ' . $fullname);
-            error_log('Email: ' . $email);
-
             if (empty($userId)) {
-                error_log('ERROR: User ID is empty!');
                 header('Location: ' . BASE_URL . '/admin/members?error=no_user_id');
                 exit;
             }
@@ -88,12 +81,7 @@ class AdminController extends Controller
                 'email' => $email
             ];
 
-            error_log('Calling updateMember with: ' . json_encode($data));
-
             $result = $userModel->updateMember($userId, $data);
-
-            error_log('Update result: ' . ($result ? 'true' : 'false'));
-            error_log('=== END DEBUG ===');
 
             if ($result) {
                 header('Location: ' . BASE_URL . '/admin/members');
@@ -147,9 +135,6 @@ class AdminController extends Controller
     public function storeBook()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            error_log("=== DEBUG: storeBook called ===");
-            error_log("POST data: " . json_encode($_POST));
-
             $bookModel = $this->model('Book');
 
             // Xử lý upload ảnh
@@ -165,7 +150,6 @@ class AdminController extends Controller
 
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
                     $imageUrl = $fileName;
-                    error_log("Image uploaded: " . $imageUrl);
                 }
             }
 
@@ -177,25 +161,17 @@ class AdminController extends Controller
                 'image_url' => $imageUrl
             ];
 
-            error_log("Data to insert: " . json_encode($data));
-            error_log("Data types - category_id: " . gettype($data['category_id']) . ", value: " . $data['category_id']);
-
             $bookId = $bookModel->addBook($data);
-
-            error_log("BookId returned: " . var_export($bookId, true));
 
             if ($bookId) {
                 // Thêm các bản sao (Quantity)
                 $quantity = (int)($_POST['quantity'] ?? 0);
                 if ($quantity > 0) {
                     $bookModel->addBookCopies($bookId, $quantity);
-                    error_log("Book copies added: " . $quantity);
                 }
                 $_SESSION['success'] = "Book added successfully!";
-                error_log("SUCCESS: Book added");
             } else {
                 $_SESSION['error'] = "Failed to add book.";
-                error_log("ERROR: addBook returned false/null");
             }
             header('Location: ' . BASE_URL . '/admin/books');
         }
@@ -264,11 +240,9 @@ class AdminController extends Controller
                     $bookModel = $this->model('Book');
                     $countSuccess = 0;
 
-                    // Bỏ qua dòng tiêu đề (header), bắt đầu từ index 1
+                    // Bỏ qua dòng tiêu đề , bắt đầu từ index 1
                     for ($i = 1; $i < count($rows); $i++) {
                         $row = $rows[$i];
-
-                        // Mapping cột: Title(0), Author(1), Category(2), Quantity(3), Description(4)
                         $title = trim($row[0] ?? '');
                         $author = trim($row[1] ?? '');
                         $category = trim($row[2] ?? '');
@@ -284,7 +258,8 @@ class AdminController extends Controller
                     }
 
                     // Redirect về trang danh sách
-                    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? BASE_URL . '/book';
+                    $_SESSION['import_result'] = "Đã nhập thành công " . $countSuccess . " cuốn sách.";
+                    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/books';
                     header('Location: ' . $redirectUrl);
                     exit;
                 } catch (Exception $e) {
