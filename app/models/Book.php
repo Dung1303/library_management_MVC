@@ -8,7 +8,7 @@ class Book extends Model
                 (SELECT COUNT(*) FROM book_copies bc 
                  WHERE bc.book_id = b.book_id) as total_copies,
                 (SELECT COUNT(*) FROM book_copies bc 
-                 WHERE bc.book_id = b.book_id AND bc.status = 'available') as available_copies
+                 WHERE bc.book_id = b.book_id AND bc.status = 'available') as available
                 FROM books b
                 LEFT JOIN categories c ON b.category_id = c.category_id
                 LIMIT :limit OFFSET :offset";
@@ -134,9 +134,89 @@ class Book extends Model
     // 4. Xóa sách
     public function deleteBook($id)
     {
-        $sql = "DELETE FROM books WHERE book_id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        return $stmt->execute();
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Xóa tất cả các bản copy của sách này trước
+            $sqlCopies = "DELETE FROM book_copies WHERE book_id = :id";
+            $stmtCopies = $this->db->prepare($sqlCopies);
+            $stmtCopies->bindValue(':id', $id);
+            $stmtCopies->execute();
+
+            // 2. Sau đó mới xóa sách trong bảng books
+            $sqlBook = "DELETE FROM books WHERE book_id = :id";
+            $stmtBook = $this->db->prepare($sqlBook);
+            $stmtBook->bindValue(':id', $id);
+            $result = $stmtBook->execute();
+
+            $this->db->commit();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return false;
+        }
+    }
+
+    // 5. Import sách từ Excel (Xử lý Transaction)
+    public function importBook($title, $author, $categoryName, $quantity, $description)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // A. Xử lý Category: Tìm ID theo tên, nếu chưa có thì tạo mới
+            $stmt = $this->db->prepare("SELECT category_id FROM categories WHERE category_name = :name");
+            $stmt->execute([':name' => $categoryName]);
+            $cat = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($cat) {
+                $categoryId = $cat['category_id'];
+            } else {
+                $stmt = $this->db->prepare("INSERT INTO categories (category_name) VALUES (:name)");
+                $stmt->execute([':name' => $categoryName]);
+                $categoryId = $this->db->lastInsertId();
+            }
+
+            // B. Kiểm tra sách đã tồn tại chưa (Dựa trên Title và Author)
+            $sqlCheck = "SELECT book_id FROM books WHERE title = :title AND author = :author LIMIT 1";
+            $stmtCheck = $this->db->prepare($sqlCheck);
+            $stmtCheck->execute([
+                ':title' => $title,
+                ':author' => $author
+            ]);
+            $existingBook = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingBook) {
+                // Sách đã tồn tại -> Lấy ID cũ
+                $bookId = $existingBook['book_id'];
+            } else {
+                // Sách chưa tồn tại -> Thêm mới vào bảng books
+                $sql = "INSERT INTO books (title, author, category_id, Description, image_url) 
+                        VALUES (:title, :author, :category_id, :description, '')";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([
+                    ':title' => $title,
+                    ':author' => $author,
+                    ':category_id' => $categoryId,
+                    ':description' => $description
+                ]);
+                $bookId = $this->db->lastInsertId();
+            }
+
+            // C. Thêm các bản sao (Copies) dựa trên quantity
+            $sqlCopy = "INSERT INTO book_copies (book_id, status) VALUES (:book_id, 'available')";
+            $stmtCopy = $this->db->prepare($sqlCopy);
+            $stmtCopy->bindValue(':book_id', $bookId);
+
+            for ($i = 0; $i < $quantity; $i++) {
+                $stmtCopy->execute();
+            }
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log("Import Error: " . $e->getMessage());
+            return false;
+        }
     }
 }

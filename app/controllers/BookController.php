@@ -20,7 +20,7 @@
                 'categories' => $categories,
                 'page' => $page,
                 'totalPages' => $totalPages,
-                'title' => 'Library Books'
+                'title' => 'Thư viện Sách'
             ]);
         }
 
@@ -36,7 +36,7 @@
 
             $this->view('home/detail', [
                 'book' => $book,
-                'title' => $book['title'] . ' - Details'
+                'title' => $book['title'] . ' - Chi tiết'
             ]);
         }
     }

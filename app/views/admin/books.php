@@ -12,9 +12,19 @@
                     <h1>Book Management</h1>
                     <p>Track and manage your library's inventory</p>
                 </div>
-                <button class="btn btn-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#addBookModal">
-                    <i class="bi bi-plus-circle me-2"></i>Add New Book
-                </button>
+                <div class="d-flex gap-2">
+                    <form action="<?= BASE_URL ?>/admin/import" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="excel_file" id="importExcelInput" class="d-none" accept=".xlsx, .xls"
+                            onchange="this.form.submit()">
+                        <button type="button" class="btn btn-success shadow-sm"
+                            onclick="document.getElementById('importExcelInput').click()">
+                            <i class="bi bi-file-earmark-spreadsheet me-2"></i>Import Excel
+                        </button>
+                    </form>
+                    <button class="btn btn-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                        <i class="bi bi-plus-circle me-2"></i>Add New Book
+                    </button>
+                </div>
             </div>
 
             <div class="card border-0 shadow-sm rounded-4">
@@ -37,19 +47,28 @@
                                     <tr>
                                         <td class="ps-4 fw-bold"><?= htmlspecialchars($book['title']) ?></td>
                                         <td><?= htmlspecialchars($book['author']) ?></td>
-                                        <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($book['category_name']) ?></span></td>
+                                        <td><span
+                                                class="badge bg-light text-dark border"><?= htmlspecialchars($book['category_name']) ?></span>
+                                        </td>
                                         <td class="text-center"><?= $book['total_copies'] ?></td>
-                                        <td class="text-center fw-bold"><?= $book['available_copies'] ?></td>
+                                        <td class="text-center fw-bold"><?= $book['available'] ?></td>
                                         <td>
-                                            <?php if ($book['available_copies'] > 0): ?>
+                                            <?php if ($book['available'] > 0): ?>
                                                 <span class="text-success small"><i class="bi bi-dot fs-4"></i>In Stock</span>
                                             <?php else: ?>
-                                                <span class="text-danger small"><i class="bi bi-dot fs-4"></i>Out of Stock</span>
+                                                <span class="text-danger small"><i class="bi bi-dot fs-4"></i>Out of
+                                                    Stock</span>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-center pe-4">
                                             <div class="btn-group">
-                                                <button class="btn btn-sm btn-outline-secondary edit-btn" data-id="<?= $book['book_id'] ?>" data-title="<?= htmlspecialchars($book['title']) ?>" data-author="<?= htmlspecialchars($book['author']) ?>" data-cat="<?= $book['category_id'] ?>" data-desc="<?= htmlspecialchars($book['Description'] ?? '') ?>" data-bs-toggle="modal" data-bs-target="#editBookModal">
+                                                <button class="btn btn-sm btn-outline-secondary edit-btn"
+                                                    data-id="<?= $book['book_id'] ?>"
+                                                    data-title="<?= htmlspecialchars($book['title']) ?>"
+                                                    data-author="<?= htmlspecialchars($book['author']) ?>"
+                                                    data-cat="<?= $book['category_id'] ?>"
+                                                    data-desc="<?= htmlspecialchars($book['Description'] ?? '') ?>"
+                                                    data-bs-toggle="modal" data-bs-target="#editBookModal">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
                                                 <a href="<?= BASE_URL ?>/admin/deleteBook/<?= $book['book_id'] ?>"
@@ -79,7 +98,8 @@
                                 </li>
                             <?php endfor; ?>
 
-                            <li class="page-item <?= ($data['currentPage'] >= $data['totalPages']) ? 'disabled' : '' ?>">
+                            <li
+                                class="page-item <?= ($data['currentPage'] >= $data['totalPages']) ? 'disabled' : '' ?>">
                                 <a class="page-link" href="?page=<?= $data['currentPage'] + 1 ?>">Next</a>
                             </li>
                         </ul>
@@ -93,7 +113,8 @@
 <!-- ADD BOOK MODAL -->
 <div class="modal fade" id="addBookModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <form action="<?= BASE_URL ?>/admin/storeBook" method="POST" enctype="multipart/form-data" class="modal-content">
+        <form action="<?= BASE_URL ?>/admin/storeBook" method="POST" enctype="multipart/form-data"
+            class="modal-content">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title fw-bold">Add New Book</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -113,7 +134,8 @@
                         <select name="category_id" class="form-select" required>
                             <option value="">-- Select Category --</option>
                             <?php foreach ($data['categories'] as $cat): ?>
-                                <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
+                                <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -162,7 +184,8 @@
                         <label class="form-label fw-bold">Category</label>
                         <select name="category_id" id="edit_cat" class="form-select" required>
                             <?php foreach ($data['categories'] as $cat): ?>
-                                <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
+                                <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>

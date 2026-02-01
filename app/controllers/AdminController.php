@@ -178,4 +178,47 @@ class AdminController extends Controller
         }
         header('Location: ' . BASE_URL . '/admin/books');
     }
+    public function import()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['excel_file'])) {
+            $file = $_FILES['excel_file']['tmp_name'];
+
+            if ($file && file_exists($file)) {
+                try {
+                    // Load file Excel bằng PhpSpreadsheet
+                    $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+                    $sheet = $spreadsheet->getActiveSheet();
+                    $rows = $sheet->toArray();
+
+                    $bookModel = $this->model('Book');
+                    $countSuccess = 0;
+
+                    // Bỏ qua dòng tiêu đề (header), bắt đầu từ index 1
+                    for ($i = 1; $i < count($rows); $i++) {
+                        $row = $rows[$i];
+
+                        // Mapping cột: Title(0), Author(1), Category(2), Quantity(3), Description(4)
+                        $title = trim($row[0] ?? '');
+                        $author = trim($row[1] ?? '');
+                        $category = trim($row[2] ?? '');
+                        $quantity = (int)($row[3] ?? 0);
+                        $description = trim($row[4] ?? '');
+
+                        if (!empty($title) && $quantity > 0) {
+                            if ($bookModel->importBook($title, $author, $category, $quantity, $description)) {
+                                $countSuccess++;
+                            }
+                        }
+                    }
+
+                    // Redirect về trang danh sách
+                    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? BASE_URL . '/book';
+                    header('Location: ' . $redirectUrl);
+                    exit;
+                } catch (Exception $e) {
+                    echo "Lỗi khi xử lý file: " . $e->getMessage();
+                }
+            }
+        }
+    }
 }
