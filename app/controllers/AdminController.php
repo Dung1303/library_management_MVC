@@ -79,30 +79,20 @@ class AdminController extends Controller
             $userId = $_POST['user_id'] ?? '';
             $fullname = $_POST['fullname'] ?? '';
             $email = $_POST['email'] ?? '';
-            
-            error_log('=== EDIT MEMBER DEBUG ===');
-            error_log('POST data: ' . print_r($_POST, true));
-            error_log('User ID: ' . $userId);
-            error_log('Fullname: ' . $fullname);
-            error_log('Email: ' . $email);
+            $username = $_POST['username'] ?? '';
             
             if (empty($userId)) {
-                error_log('ERROR: User ID is empty!');
                 header('Location: ' . BASE_URL . '/admin/members?error=no_user_id');
                 exit;
             }
             
             $data = [
                 'fullname' => $fullname,
-                'email' => $email
+                'email' => $email,
+                'username' => $username
             ];
             
-            error_log('Calling updateMember with: ' . json_encode($data));
-            
             $result = $userModel->updateMember($userId, $data);
-            
-            error_log('Update result: ' . ($result ? 'true' : 'false'));
-            error_log('=== END DEBUG ===');
 
             if ($result) {
                 header('Location: ' . BASE_URL . '/admin/members');

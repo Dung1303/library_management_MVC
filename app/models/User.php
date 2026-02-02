@@ -159,13 +159,14 @@ class User extends Model
     {
         $stmt = $this->db->prepare("
             UPDATE users 
-            SET full_name = ?, email = ? 
+            SET full_name = ?, email = ?, username = ? 
             WHERE user_id = ?
         ");
         
         return $stmt->execute([
             $data['fullname'],
             $data['email'],
+            $data['username'],
             $id
         ]);
     }
