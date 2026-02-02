@@ -12,14 +12,25 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <section class="search-section">
     <div class="container">
-        <div class="search-filter-wrapper">
-            <select id="categoryFilter">
-                <option value="">All Categories</option>
+        <form action="<?= BASE_URL ?>/home/index" method="GET" class="search-form-container"
+            style="display: flex; gap: 1rem; align-items: center; background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+            <input type="text" name="keyword" placeholder="Tìm kiếm theo tên sách, tác giả..."
+                value="<?= htmlspecialchars($keyword ?? '') ?>"
+                style="flex-grow: 1; padding: 0.75rem; border: 1px solid #ced4da; border-radius: 4px;">
+
+            <select name="category_id" id="categoryFilter"
+                style="padding: 0.75rem; border: 1px solid #ced4da; border-radius: 4px;">
+                <option value="">Tất cả danh mục</option>
                 <?php foreach ($categories as $cat): ?>
-                <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
+                <option value="<?= $cat['category_id'] ?>"
+                    <?= (isset($category_id) && $category_id == $cat['category_id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($cat['category_name']) ?>
+                </option>
                 <?php endforeach; ?>
             </select>
-        </div>
+
+            <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Tìm kiếm</button>
+        </form>
     </div>
 </section>
 
@@ -27,7 +38,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <div class="container">
         <?php if (empty($books)): ?>
         <div class="empty-message">
-            <p>No books available in this category.</p>
+            <p>Không tìm thấy sách nào phù hợp.</p>
         </div>
         <?php else: ?>
         <div class="books-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
@@ -67,14 +78,22 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
 
         <div class="pagination">
+            <?php
+            // Giữ lại các tham số filter khi chuyển trang
+            $queryParams = [];
+            if (!empty($keyword)) $queryParams['keyword'] = $keyword;
+            if (!empty($category_id)) $queryParams['category_id'] = $category_id;
+            ?>
             <?php if ($page > 1): ?>
-            <a href="?page=<?= $page - 1 ?>" class="page-btn">Previous</a>
+            <a href="?<?= http_build_query(array_merge($queryParams, ['page' => $page - 1])) ?>"
+                class="page-btn">Previous</a>
             <?php endif; ?>
 
             <span>Page <?= $page ?> of <?= $totalPages ?></span>
 
             <?php if ($page < $totalPages): ?>
-            <a href="?page=<?= $page + 1 ?>" class="page-btn">Next</a>
+            <a href="?<?= http_build_query(array_merge($queryParams, ['page' => $page + 1])) ?>"
+                class="page-btn">Next</a>
             <?php endif; ?>
         </div>
         <?php endif; ?>
@@ -85,3 +104,15 @@ require_once __DIR__ . '/../layouts/header.php';
 // Nạp thủ công Footer
 require_once __DIR__ . '/../layouts/footer.php';
 ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            // Khi người dùng chọn một danh mục, tự động submit form để lọc
+            this.form.submit();
+        });
+    }
+});
+</script>

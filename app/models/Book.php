@@ -1,31 +1,75 @@
 <?php
 class Book extends Model
 {
-    public function getAllBooks($limit = 12, $offset = 0)
+    public function getBooks(array $filters = [], $limit = 12, $offset = 0)
     {
         // SQL JOIN để lấy thông tin sách, tên danh mục và đếm số bản sao
-        $sql = "SELECT b.*, c.category_name, 
+        $baseSql = "SELECT b.*, c.category_name, 
                 (SELECT COUNT(*) FROM book_copies bc 
                  WHERE bc.book_id = b.book_id) as total_copies,
                 (SELECT COUNT(*) FROM book_copies bc 
                  WHERE bc.book_id = b.book_id AND bc.status = 'available') as available
                 FROM books b
-                LEFT JOIN categories c ON b.category_id = c.category_id
-                LIMIT :limit OFFSET :offset";
+                LEFT JOIN categories c ON b.category_id = c.category_id";
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $whereClauses = [];
+        $params = [];
+
+        // Lọc theo từ khóa (title hoặc author)
+        if (!empty($filters['keyword'])) {
+            $whereClauses[] = "(b.title LIKE :keyword OR b.author LIKE :keyword)";
+            $params[':keyword'] = '%' . $filters['keyword'] . '%';
+        }
+
+        // Lọc theo danh mục
+        if (!empty($filters['category_id'])) {
+            $whereClauses[] = "b.category_id = :category_id";
+            $params[':category_id'] = $filters['category_id'];
+        }
+
+        if (!empty($whereClauses)) {
+            $baseSql .= " WHERE " . implode(' AND ', $whereClauses);
+        }
+
+        $baseSql .= " ORDER BY b.book_id DESC LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($baseSql);
+
+        // Bind các giá trị từ params
+        foreach ($params as $key => &$val) {
+            $stmt->bindParam($key, $val);
+        }
+
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getTotalBooksCount()
+    public function countBooks(array $filters = [])
     {
-        $sql = "SELECT COUNT(*) as total FROM books";
-        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
-        return $result['total'];
+        $baseSql = "SELECT COUNT(b.book_id) as total FROM books b";
+        $whereClauses = [];
+        $params = [];
+
+        if (!empty($filters['keyword'])) {
+            $whereClauses[] = "(b.title LIKE :keyword OR b.author LIKE :keyword)";
+            $params[':keyword'] = '%' . $filters['keyword'] . '%';
+        }
+        if (!empty($filters['category_id'])) {
+            $whereClauses[] = "b.category_id = :category_id";
+            $params[':category_id'] = $filters['category_id'];
+        }
+
+        if (!empty($whereClauses)) {
+            $baseSql .= " WHERE " . implode(' AND ', $whereClauses);
+        }
+
+        $stmt = $this->db->prepare($baseSql);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
     }
 
     public function getTotalCopiesCount()

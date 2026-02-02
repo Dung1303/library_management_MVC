@@ -23,7 +23,7 @@ class AdminController extends Controller
         $borrowModel = $this->model('BorrowRecord');
 
         // Lấy dữ liệu thống kê
-        $totalBooks = $bookModel->getTotalBooksCount();
+        $totalBooks = $bookModel->countBooks();
         $totalMembers = $userModel->getTotalUsersCount();
         $availableBooks = $bookModel->getAvailableCopiesCount();
         $overdueBooks = $borrowModel->getOverdueBooksCount();
@@ -118,9 +118,9 @@ class AdminController extends Controller
         $offset = ($page - 1) * $limit;
 
         // Lấy dữ liệu
-        $books = $bookModel->getAllBooks($limit, $offset);
+        $books = $bookModel->getBooks([], $limit, $offset);
         $categories = $categoryModel->getAllCategories(); // Để hiển thị trong Modal Add/Edit
-        $totalBooks = $bookModel->getTotalBooksCount();
+        $totalBooks = $bookModel->countBooks();
         $totalPages = ceil($totalBooks / $limit);
 
         $this->view('admin/books', [
