@@ -45,16 +45,24 @@ class BorrowController extends Controller
     {
         $borrowModel = $this->model('BorrowRecord');
 
+        $keyword = $_GET['keyword'] ?? '';
         $page = (int) ($_GET['page'] ?? 1);
         $page = max(1, $page); // Đảm bảo page >= 1
         $limit = 10;
 
-        $borrows = $borrowModel->getAllBorrowHistory($page, $limit);
-        $total = $borrowModel->countAllBorrowHistory();
+        if (!empty($keyword)) {
+            $borrows = $borrowModel->searchHistoryByMemberName($keyword, $page, $limit);
+            $total = $borrowModel->countSearchHistoryByMemberName($keyword);
+        } else {
+            $borrows = $borrowModel->getAllBorrowHistory($page, $limit);
+            $total = $borrowModel->countAllBorrowHistory();
+        }
+
         $totalPages = ceil($total / $limit);
 
         $this->view('admin/history', [
             'borrows' => $borrows,
+            'keyword' => $keyword,
             'page' => $page,
             'totalPages' => $totalPages,
             'total' => $total,
@@ -67,6 +75,7 @@ class BorrowController extends Controller
     {
         $userModel   = $this->model('User');
         $bookModel   = $this->model('Book');
+        $copyModel   = $this->model('BookCopy');
         $borrowModel = $this->model('BorrowRecord');
 
         // ======================
@@ -91,13 +100,20 @@ class BorrowController extends Controller
                 die('Hạn trả không hợp lệ');
             }
 
-            // Gọi hàm xử lý Transaction trong Model
-            $borrowModel->createBorrowWithCopies(
+            // Tạo phiếu mượn
+            $borrowId = $borrowModel->createBorrow(
                 $userId,
                 $borrowDate,
-                $dueDate,
-                $copyIds
+                $dueDate
             );
+
+            // Thêm tất cả sách vào phiếu mượn
+            foreach ($copyIds as $copyId) {
+                if (!empty($copyId) && is_numeric($copyId)) {
+                    $borrowModel->addBorrowCopy($borrowId, $copyId);
+                    $copyModel->updateStatus($copyId, 'borrowed');
+                }
+            }
 
             header('Location: ' . BASE_URL . '/admin/index');
             exit;
