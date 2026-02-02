@@ -21,10 +21,10 @@ class BorrowRecord extends Model
                 INNER JOIN books b ON bc.book_id = b.book_id
                 WHERE br.user_id = ?
                 ORDER BY br.borrow_date DESC";
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$user_id]);
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -47,17 +47,17 @@ class BorrowRecord extends Model
                 INNER JOIN books b ON bc.book_id = b.book_id
                 WHERE br.user_id = ? AND br.status != 'returned'
                 ORDER BY br.due_date ASC";
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$user_id]);
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-// Lấy toàn bộ lịch sử mượn (Admin) - có phân trang
-public function getAllBorrowHistory($page = 1, $limit = 10)
-{
-    $offset = ($page - 1) * $limit;
-    $sql = "SELECT 
+    // Lấy toàn bộ lịch sử mượn (Admin) - có phân trang
+    public function getAllBorrowHistory($page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+        $sql = "SELECT 
                 br.borrow_id,
                 u.full_name,
                 GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ') as titles,
@@ -75,20 +75,20 @@ public function getAllBorrowHistory($page = 1, $limit = 10)
             ORDER BY br.borrow_date DESC
             LIMIT " . intval($limit) . " OFFSET " . intval($offset);
 
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-// Lấy tổng số lịch sử mượn
-public function countAllBorrowHistory()
-{
-    $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total FROM borrow_records br";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['total'];
-}
+    // Lấy tổng số lịch sử mượn
+    public function countAllBorrowHistory()
+    {
+        $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total FROM borrow_records br";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
 
     // Lấy thông tin chi tiết lịch sử mượn (theo borrow_id)
     public function getBorrowDetails($borrow_id)
@@ -108,10 +108,10 @@ public function countAllBorrowHistory()
                 INNER JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
                 INNER JOIN books b ON bc.book_id = b.book_id
                 WHERE br.borrow_id = ?";
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$borrow_id]);
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -121,10 +121,10 @@ public function countAllBorrowHistory()
         $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total 
                 FROM borrow_records br
                 WHERE br.status != 'returned' AND br.return_date IS NULL";
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'];
     }
@@ -135,18 +135,18 @@ public function countAllBorrowHistory()
         $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total 
                 FROM borrow_records br
                 WHERE br.status = 'overdue' AND br.return_date IS NULL";
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'];
     }
     // Lấy tất cả phiếu đang mượn (Admin) - có phân trang
-public function getAllActiveBorrows($page = 1, $limit = 10)
-{
-    $offset = ($page - 1) * $limit;
-    $sql = "SELECT 
+    public function getAllActiveBorrows($page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+        $sql = "SELECT 
                 br.borrow_id,
                 u.full_name,
                 GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ') as titles,
@@ -164,75 +164,75 @@ public function getAllActiveBorrows($page = 1, $limit = 10)
             ORDER BY br.due_date ASC
             LIMIT " . intval($limit) . " OFFSET " . intval($offset);
 
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-// Lấy tổng số phiếu đang mượn
-public function countAllActiveBorrows()
-{
-    $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total FROM borrow_records br WHERE br.status != 'returned'";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['total'];
-}
+    // Lấy tổng số phiếu đang mượn
+    public function countAllActiveBorrows()
+    {
+        $sql = "SELECT COUNT(DISTINCT br.borrow_id) as total FROM borrow_records br WHERE br.status != 'returned'";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
 
-// Admin tạo phiếu mượn
-public function createBorrow($user_id, $borrow_date, $due_date)
-{
-    $stmt = $this->db->prepare(
-        "INSERT INTO borrow_records (user_id, borrow_date, due_date, status)
+    // Admin tạo phiếu mượn
+    public function createBorrow($user_id, $borrow_date, $due_date)
+    {
+        $stmt = $this->db->prepare(
+            "INSERT INTO borrow_records (user_id, borrow_date, due_date, status)
          VALUES (?, ?, ?, 'borrowed')"
-    );
-    $stmt->execute([$user_id, $borrow_date, $due_date]);
-    return $this->db->lastInsertId();
-}
+        );
+        $stmt->execute([$user_id, $borrow_date, $due_date]);
+        return $this->db->lastInsertId();
+    }
 
-public function addBorrowCopy($borrow_id, $book_copy_id)
-{
-    $stmt = $this->db->prepare(
-        "INSERT INTO borrow_records_book_copies (borrow_id, book_copy_id, is_returned)
+    public function addBorrowCopy($borrow_id, $book_copy_id)
+    {
+        $stmt = $this->db->prepare(
+            "INSERT INTO borrow_records_book_copies (borrow_id, book_copy_id, is_returned)
          VALUES (?, ?, 0)"
-    );
-    return $stmt->execute([$borrow_id, $book_copy_id]);
-}
+        );
+        return $stmt->execute([$borrow_id, $book_copy_id]);
+    }
 
-// Trả sách
-public function returnBook($borrow_id, $book_copy_id)
-{
-    try {
-        $this->db->beginTransaction();
+    // Trả sách
+    public function returnBook($borrow_id, $book_copy_id)
+    {
+        try {
+            $this->db->beginTransaction();
 
-        $this->db->prepare(
-            "UPDATE borrow_records_book_copies 
+            $this->db->prepare(
+                "UPDATE borrow_records_book_copies 
              SET is_returned = 1 
              WHERE borrow_id = ? AND book_copy_id = ?"
-        )->execute([$borrow_id, $book_copy_id]);
+            )->execute([$borrow_id, $book_copy_id]);
 
-        $this->db->prepare(
-            "UPDATE book_copies 
+            $this->db->prepare(
+                "UPDATE book_copies 
              SET status = 'available' 
              WHERE book_copy_id = ?"
-        )->execute([$book_copy_id]);
+            )->execute([$book_copy_id]);
 
-        $this->db->prepare(
-            "UPDATE borrow_records 
+            $this->db->prepare(
+                "UPDATE borrow_records 
              SET status = 'returned', return_date = NOW()
              WHERE borrow_id = ?"
-        )->execute([$borrow_id]);
+            )->execute([$borrow_id]);
 
-        $this->db->commit();
-    } catch (Exception $e) {
-        $this->db->rollBack();
-        throw $e;
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
-}
-public function searchByMemberName($keyword, $page = 1, $limit = 10)
-{
-    $offset = ($page - 1) * $limit;
-    $sql = "
+    public function searchByMemberName($keyword, $page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+        $sql = "
         SELECT 
             br.borrow_id,
             u.full_name,
@@ -251,30 +251,81 @@ public function searchByMemberName($keyword, $page = 1, $limit = 10)
         ORDER BY br.borrow_date DESC
         LIMIT " . intval($limit) . " OFFSET " . intval($offset);
 
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([
-        ':keyword' => '%' . $keyword . '%'
-    ]);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':keyword' => '%' . $keyword . '%'
+        ]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-// Đếm số lượng phiếu mượn theo tìm kiếm
-public function countSearchByMemberName($keyword)
-{
-    $sql = "
+    // Đếm số lượng phiếu mượn theo tìm kiếm
+    public function countSearchByMemberName($keyword)
+    {
+        $sql = "
         SELECT COUNT(DISTINCT br.borrow_id) as total 
         FROM borrow_records br
         JOIN users u ON br.user_id = u.user_id
         WHERE u.full_name LIKE :keyword AND br.status != 'returned'
     ";
-    
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([
-        ':keyword' => '%' . $keyword . '%'
-    ]);
-    
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['total'];
-}
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':keyword' => '%' . $keyword . '%'
+        ]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    // Tìm kiếm toàn bộ lịch sử theo tên thành viên
+    public function searchHistoryByMemberName($keyword, $page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+        $sql = "
+        SELECT 
+            br.borrow_id,
+            u.full_name,
+            GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ') as titles,
+            GROUP_CONCAT(DISTINCT bc.barcode SEPARATOR ', ') as barcodes,
+            br.borrow_date,
+            br.due_date,
+            br.return_date,
+            br.status
+        FROM borrow_records br
+        JOIN users u ON br.user_id = u.user_id
+        LEFT JOIN borrow_records_book_copies brbc ON br.borrow_id = brbc.borrow_id
+        LEFT JOIN book_copies bc ON brbc.book_copy_id = bc.book_copy_id
+        LEFT JOIN books b ON bc.book_id = b.book_id
+        WHERE u.full_name LIKE :keyword
+        GROUP BY br.borrow_id, u.full_name, br.borrow_date, br.due_date, br.return_date, br.status
+        ORDER BY br.borrow_date DESC
+        LIMIT " . intval($limit) . " OFFSET " . intval($offset);
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':keyword' => '%' . $keyword . '%'
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Đếm số lượng phiếu mượn trong lịch sử theo tìm kiếm
+    public function countSearchHistoryByMemberName($keyword)
+    {
+        $sql = "
+        SELECT COUNT(DISTINCT br.borrow_id) as total 
+        FROM borrow_records br
+        JOIN users u ON br.user_id = u.user_id
+        WHERE u.full_name LIKE :keyword
+    ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':keyword' => '%' . $keyword . '%'
+        ]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
 }
