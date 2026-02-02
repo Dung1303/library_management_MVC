@@ -10,9 +10,9 @@
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $offset = ($page - 1) * $limit;
 
-            $books = $bookModel->getAllBooks($limit, $offset);
+            $books = $bookModel->getBooks([], $limit, $offset);
             $categories = $categoryModel->getAllCategories();
-            $totalBooks = $bookModel->getTotalBooksCount();
+            $totalBooks = $bookModel->countBooks();
             $totalPages = ceil($totalBooks / $limit);
 
             $this->view('member/home', [
