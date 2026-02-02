@@ -71,8 +71,9 @@ INSERT INTO `books` (`book_id`, `title`, `author`, `category_id`, `image_url`, `
 CREATE TABLE `book_copies` (
   `book_copy_id` int(11) NOT NULL,
   `book_id` int(11) DEFAULT NULL,
-  `status` enum('available','borrowed') DEFAULT 'available',
-  `barcode` varchar(50) DEFAULT NULL
+  `status` enum('available','borrowed','damaged','lost') DEFAULT 'available',
+  `barcode` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

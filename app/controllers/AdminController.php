@@ -268,4 +268,84 @@ class AdminController extends Controller
             }
         }
     }
+    // Giao diện chính của quản lý bản sao
+    public function bookCopies()
+    {
+        $copyModel = $this->model('BookCopy');
+        $bookModel = $this->model('Book');
+
+        // Phân trang
+        $limit = 15; // Số bản sao trên mỗi trang
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
+
+        // Lấy dữ liệu bản sao đã phân trang
+        $copies = $copyModel->getAllCopies($limit, $offset);
+        $totalCopies = $copyModel->countAllCopies();
+        $totalPages = ceil($totalCopies / $limit);
+
+        // Lấy danh sách sách để đổ vào dropdown thêm bản sao
+        $books = $bookModel->getBooks([], 1000, 0); // Lấy nhiều sách để không bị thiếu
+
+        $this->view('admin/book_copies', [
+            'copies' => $copies,
+            'books' => $books,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
+        ]);
+    }
+
+    // Lưu bản sao mới
+    public function storeCopy()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $book_id = $_POST['book_id'];
+            $copyModel = $this->model('BookCopy');
+
+            if ($copyModel->addCopy($book_id)) {
+                $_SESSION['success'] = "Added new copy successfully!";
+            } else {
+                $_SESSION['error'] = "Failed to add copy.";
+            }
+            header('Location: ' . BASE_URL . '/admin/bookCopies');
+            exit;
+        }
+    }
+
+    // Cập nhật trạng thái bản sao
+    public function updateCopy()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $copyModel = $this->model('BookCopy');
+            $copy_id = $_POST['book_copy_id'] ?? 0;
+            $status = $_POST['status'] ?? '';
+
+            // Chỉ cho phép cập nhật sang các trạng thái thủ công
+            $allowed_statuses = ['available', 'damaged', 'lost'];
+            if ($copy_id && in_array($status, $allowed_statuses)) {
+                if ($copyModel->updateStatus($copy_id, $status)) {
+                    $_SESSION['success'] = "Copy status updated successfully!";
+                } else {
+                    $_SESSION['error'] = "Failed to update copy status.";
+                }
+            } else {
+                $_SESSION['error'] = "Invalid data provided. Status 'borrowed' is managed automatically.";
+            }
+            header('Location: ' . BASE_URL . '/admin/bookCopies');
+            exit;
+        }
+    }
+
+    // Xử lý xóa bản sao
+    public function deleteCopy($id)
+    {
+        $copyModel = $this->model('BookCopy');
+        if ($copyModel->deleteCopy($id)) {
+            $_SESSION['success'] = "Copy deleted!";
+        } else {
+            $_SESSION['error'] = "Failed to delete copy. It might be in use.";
+        }
+        header('Location: ' . BASE_URL . '/admin/bookCopies');
+        exit;
+    }
 }

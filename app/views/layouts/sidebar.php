@@ -34,5 +34,10 @@
                 <i class=" bi bi-exclamation-circle"></i><span>Overdue Books</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="<?= BASE_URL ?>/admin/bookCopies" class="nav-link <?= (strpos($_SERVER['REQUEST_URI'], 'bookCopies') !== false) ? 'active' : '' ?>">
+                <i class="bi bi-layers-half me-2"></i> <span>Book Copies</span>
+            </a>
+        </li>
     </ul>
 </aside>
