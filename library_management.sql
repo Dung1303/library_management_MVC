@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2026 at 02:31 PM
+-- Generation Time: Feb 03, 2026 at 03:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,73 +74,75 @@ CREATE TABLE `book_copies` (
   `status` enum('available','borrowed','damaged','lost') DEFAULT 'available',
   `barcode` varchar(50) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `book_copies`
 --
 
-INSERT INTO `book_copies` (`book_copy_id`, `book_id`, `status`, `barcode`) VALUES
-(1, 1, 'available', 'BC-1-1'),
-(2, 1, 'available', 'BC-1-2'),
-(3, 1, 'available', 'BC-1-3'),
-(4, 2, 'available', 'BC-2-1'),
-(5, 2, 'borrowed', 'BC-2-2'),
-(6, 2, 'available', 'BC-2-3'),
-(7, 6, 'available', 'BC-6-1'),
-(8, 6, 'available', 'BC-6-2'),
-(9, 6, 'available', 'BC-6-3'),
-(10, 10, 'available', 'BC-10-1'),
-(11, 10, 'available', 'BC-10-2'),
-(12, 10, 'available', 'BC-10-3'),
-(13, 18, 'available', 'BC-18-1'),
-(14, 18, 'available', 'BC-18-2'),
-(15, 18, 'available', 'BC-18-3'),
-(16, 19, 'available', 'BC-19-1'),
-(17, 19, 'available', 'BC-19-2'),
-(18, 19, 'available', 'BC-19-3'),
-(19, 20, 'available', 'BC-20-1'),
-(20, 20, 'available', 'BC-20-2'),
-(21, 20, 'available', 'BC-20-3'),
-(22, 5, 'available', 'BC-5-1'),
-(23, 5, 'available', 'BC-5-2'),
-(24, 5, 'available', 'BC-5-3'),
-(25, 9, 'available', 'BC-9-1'),
-(26, 9, 'available', 'BC-9-2'),
-(27, 9, 'available', 'BC-9-3'),
-(28, 13, 'available', 'BC-13-1'),
-(29, 13, 'available', 'BC-13-2'),
-(30, 13, 'available', 'BC-13-3'),
-(31, 4, 'available', 'BC-4-1'),
-(32, 4, 'available', 'BC-4-2'),
-(33, 4, 'available', 'BC-4-3'),
-(34, 7, 'available', 'BC-7-1'),
-(35, 7, 'available', 'BC-7-2'),
-(36, 7, 'available', 'BC-7-3'),
-(37, 15, 'available', 'BC-15-1'),
-(38, 15, 'available', 'BC-15-2'),
-(39, 15, 'available', 'BC-15-3'),
-(40, 16, 'available', 'BC-16-1'),
-(41, 16, 'available', 'BC-16-2'),
-(42, 16, 'available', 'BC-16-3'),
-(43, 17, 'available', 'BC-17-1'),
-(44, 17, 'available', 'BC-17-2'),
-(45, 17, 'available', 'BC-17-3'),
-(46, 3, 'available', 'BC-3-1'),
-(47, 3, 'available', 'BC-3-2'),
-(48, 3, 'available', 'BC-3-3'),
-(49, 8, 'available', 'BC-8-1'),
-(50, 8, 'available', 'BC-8-2'),
-(51, 8, 'available', 'BC-8-3'),
-(52, 14, 'available', 'BC-14-1'),
-(53, 14, 'available', 'BC-14-2'),
-(54, 14, 'available', 'BC-14-3'),
-(55, 11, 'available', 'BC-11-1'),
-(56, 11, 'available', 'BC-11-2'),
-(57, 11, 'available', 'BC-11-3'),
-(58, 12, 'available', 'BC-12-1'),
-(59, 12, 'available', 'BC-12-2'),
-(60, 12, 'available', 'BC-12-3');
+INSERT INTO `book_copies` (`book_copy_id`, `book_id`, `status`, `barcode`, `created_at`) VALUES
+(1, 1, 'available', 'BC-1-1', '2026-02-03 01:29:52'),
+(2, 1, 'available', 'BC-1-2', '2026-02-03 01:29:52'),
+(3, 1, 'available', 'BC-1-3', '2026-02-03 01:29:52'),
+(4, 2, 'available', 'BC-2-1', '2026-02-03 01:29:52'),
+(5, 2, 'available', 'BC-2-2', '2026-02-03 01:29:52'),
+(6, 2, 'available', 'BC-2-3', '2026-02-03 01:29:52'),
+(7, 6, 'available', 'BC-6-1', '2026-02-03 01:29:52'),
+(8, 6, 'available', 'BC-6-2', '2026-02-03 01:29:52'),
+(9, 6, 'available', 'BC-6-3', '2026-02-03 01:29:52'),
+(10, 10, 'available', 'BC-10-1', '2026-02-03 01:29:52'),
+(11, 10, 'available', 'BC-10-2', '2026-02-03 01:29:52'),
+(12, 10, 'available', 'BC-10-3', '2026-02-03 01:29:52'),
+(13, 18, 'available', 'BC-18-1', '2026-02-03 01:29:52'),
+(14, 18, 'available', 'BC-18-2', '2026-02-03 01:29:52'),
+(15, 18, 'available', 'BC-18-3', '2026-02-03 01:29:52'),
+(16, 19, 'available', 'BC-19-1', '2026-02-03 01:29:52'),
+(17, 19, 'available', 'BC-19-2', '2026-02-03 01:29:52'),
+(18, 19, 'available', 'BC-19-3', '2026-02-03 01:29:52'),
+(19, 20, 'available', 'BC-20-1', '2026-02-03 01:29:52'),
+(20, 20, 'available', 'BC-20-2', '2026-02-03 01:29:52'),
+(21, 20, 'available', 'BC-20-3', '2026-02-03 01:29:52'),
+(22, 5, 'borrowed', 'BC-5-1', '2026-02-03 01:29:52'),
+(23, 5, 'available', 'BC-5-2', '2026-02-03 01:29:52'),
+(24, 5, 'available', 'BC-5-3', '2026-02-03 01:29:52'),
+(25, 9, 'available', 'BC-9-1', '2026-02-03 01:29:52'),
+(26, 9, 'available', 'BC-9-2', '2026-02-03 01:29:52'),
+(27, 9, 'available', 'BC-9-3', '2026-02-03 01:29:52'),
+(28, 13, 'available', 'BC-13-1', '2026-02-03 01:29:52'),
+(29, 13, 'available', 'BC-13-2', '2026-02-03 01:29:52'),
+(30, 13, 'available', 'BC-13-3', '2026-02-03 01:29:52'),
+(31, 4, 'available', 'BC-4-1', '2026-02-03 01:29:52'),
+(32, 4, 'available', 'BC-4-2', '2026-02-03 01:29:52'),
+(33, 4, 'available', 'BC-4-3', '2026-02-03 01:29:52'),
+(34, 7, 'available', 'BC-7-1', '2026-02-03 01:29:52'),
+(35, 7, 'borrowed', 'BC-7-2', '2026-02-03 01:29:52'),
+(36, 7, 'available', 'BC-7-3', '2026-02-03 01:29:52'),
+(37, 15, 'available', 'BC-15-1', '2026-02-03 01:29:52'),
+(38, 15, 'available', 'BC-15-2', '2026-02-03 01:29:52'),
+(39, 15, 'available', 'BC-15-3', '2026-02-03 01:29:52'),
+(40, 16, 'available', 'BC-16-1', '2026-02-03 01:29:52'),
+(41, 16, 'available', 'BC-16-2', '2026-02-03 01:29:52'),
+(42, 16, 'available', 'BC-16-3', '2026-02-03 01:29:52'),
+(43, 17, 'available', 'BC-17-1', '2026-02-03 01:29:52'),
+(44, 17, 'available', 'BC-17-2', '2026-02-03 01:29:52'),
+(45, 17, 'available', 'BC-17-3', '2026-02-03 01:29:52'),
+(46, 3, 'available', 'BC-3-1', '2026-02-03 01:29:52'),
+(47, 3, 'available', 'BC-3-2', '2026-02-03 01:29:52'),
+(48, 3, 'available', 'BC-3-3', '2026-02-03 01:29:52'),
+(49, 8, 'available', 'BC-8-1', '2026-02-03 01:29:52'),
+(50, 8, 'available', 'BC-8-2', '2026-02-03 01:29:52'),
+(51, 8, 'available', 'BC-8-3', '2026-02-03 01:29:52'),
+(52, 14, 'available', 'BC-14-1', '2026-02-03 01:29:52'),
+(53, 14, 'available', 'BC-14-2', '2026-02-03 01:29:52'),
+(54, 14, 'available', 'BC-14-3', '2026-02-03 01:29:52'),
+(55, 11, 'available', 'BC-11-1', '2026-02-03 01:29:52'),
+(56, 11, 'available', 'BC-11-2', '2026-02-03 01:29:52'),
+(57, 11, 'available', 'BC-11-3', '2026-02-03 01:29:52'),
+(58, 12, 'available', 'BC-12-1', '2026-02-03 01:29:52'),
+(59, 12, 'available', 'BC-12-2', '2026-02-03 01:29:52'),
+(60, 12, 'available', 'BC-12-3', '2026-02-03 01:29:52'),
+(61, 1, 'available', 'BC-1-4', '2026-02-03 13:44:49'),
+(62, 1, 'available', 'BC-1-5', '2026-02-03 13:44:49');
 
 -- --------------------------------------------------------
 
@@ -162,8 +164,10 @@ CREATE TABLE `borrow_records` (
 --
 
 INSERT INTO `borrow_records` (`borrow_id`, `user_id`, `borrow_date`, `due_date`, `return_date`, `status`) VALUES
-(1, 2, '2026-01-01', '2026-01-15', NULL, 'overdue'),
-(2, 3, '2026-01-10', '2026-01-24', NULL, 'borrowed');
+(1, 2, '2026-01-01', '2026-01-15', '2026-02-03', 'returned'),
+(2, 3, '2026-01-10', '2026-01-24', '2026-02-03', 'returned'),
+(3, 3, '2026-02-03', '2026-02-04', '2026-02-03', 'returned'),
+(4, 7, '2026-02-03', '2026-02-04', NULL, 'borrowed');
 
 -- --------------------------------------------------------
 
@@ -184,7 +188,10 @@ CREATE TABLE `borrow_records_book_copies` (
 
 INSERT INTO `borrow_records_book_copies` (`borrow_detail_id`, `borrow_id`, `book_copy_id`, `is_returned`) VALUES
 (1, 1, 2, 0),
-(2, 2, 5, 0);
+(2, 2, 5, 0),
+(3, 3, 23, 0),
+(4, 4, 22, 0),
+(5, 4, 35, 0);
 
 -- --------------------------------------------------------
 
@@ -202,11 +209,11 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`category_id`, `category_name`) VALUES
-(1, 'Công nghệ thông tin'),
-(2, 'Kinh tế'),
-(3, 'Văn học'),
-(4, 'Kỹ năng'),
-(5, 'Khoa học');
+(1, 'Infomation Technology'),
+(2, 'Economy'),
+(3, 'Literature'),
+(4, 'Skill'),
+(5, 'Science');
 
 -- --------------------------------------------------------
 
@@ -263,7 +270,7 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `email`, `r
 (2, 'member01', '$2y$10$8WkXF.p5LpZ7A8M/BvY.EuS/K0yG1Z4v7rG6oG9x1zM/BvY.EuS/', 'Nguyễn Văn Thành', 'thanh@gmail.com', 'member', 'active'),
 (3, 'member02', '$2y$10$8WkXF.p5LpZ7A8M/BvY.EuS/K0yG1Z4v7rG6oG9x1zM/BvY.EuS/', 'Lê Thị Hoa', 'hoa@gmail.com', 'member', 'active'),
 (4, 'trang09', '$2y$10$XETgGW8Le4zwrImrAnoPmuRZ5yiIk3UJrfIdXAoOMOavmtBxLJ0bG', 'trangnguyen', 'trang123@gmail.com', 'member', 'active'),
-(5, 'khue09', '$2y$10$P69deUjgy8I7zoC6iBz0/exsXOBLH.KP.aKUGx4iVhUaWDVuuuzq6', 'khuenguyen', 'khue123@gmail.com', 'member', 'active'),
+(5, 'khue0', '$2y$10$P69deUjgy8I7zoC6iBz0/exsXOBLH.KP.aKUGx4iVhUaWDVuuuzq6', 'khuenguyen', 'khue123@gmail.com', 'member', 'active'),
 (6, 'lac123', '$2y$10$KuFodtutH3dvRDI7YskPvOgyTEdq6/JVq0uH8AHZGiIjCGTRi6MPW', 'tienlac', 'lac123@gmail.com', 'member', 'active'),
 (7, 'anh123', '$2y$10$8qapcI/LFVXIlo21jE/Px.XG5sBzt1AqzttzEFNAlWG66tX54urey', 'ngocanh', 'anh123@gmail.com', 'member', 'active'),
 (8, 'thuytrang', '$2y$10$1hXkDx0eSNuyQrF0TINoaOSrxQEYNL9j.wdgYQ12ygJyt0ZxFnuoK', 'ttrang123', 'ttrang123@gmail.com', 'member', 'active'),
@@ -271,7 +278,8 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `email`, `r
 (10, 'tu123123', '$2y$10$DFwRPImvBbtzqsZ67ja1GedcdqS1USUV/.pA36ID7gwWOMn/WJRie', 'tunguyen', 'tu123@gmail.com', 'member', 'active'),
 (11, 'viet123', '$2y$10$aURLLxk5WrFaiW1DmQGAHep1WhHDDjErNAUaA43UOAbnJDVFsM5hq', 'vietnguyen', 'viet123@gmail.com', 'member', 'active'),
 (12, 'ThuTrang', '$2y$10$8MF2E/FqdBc0zXOQEkgqYO4PunMQ.08w70dV5tFqrfwMRjm9iSI16', 'Nguyễn Thu Trang', 'trang1234@gmail.com', 'member', 'active'),
-(13, 'mintu', '$2y$10$wggEpV6qVtu93up76EO78u0EZSkexyNj6dNEQu1I4HTvd4i0Y0fqG', 'Tu Ngo Minh', 'minhtu080906@gmail.com', 'member', 'active');
+(13, 'mintu', '$2y$10$4fKRpfb9HpyD0kj0OMz3W.oacIBGMpVDNQrDCH.3MUl7CrHciSa0u', 'Tu Ngo Minh', 'minhtu080906@gmail.com', 'admin', 'active'),
+(14, 'mtu', '$2y$10$mvzPK7W0W0Druc58IxCTDOOWv0V8vgT1qmLPsS5mYu/NifhNIEzBu', 'NGO MINH TU', 'admin@flowershop.com', 'member', 'active');
 
 --
 -- Indexes for dumped tables
@@ -336,25 +344,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `book_copies`
 --
 ALTER TABLE `book_copies`
-  MODIFY `book_copy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `book_copy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `borrow_records`
 --
 ALTER TABLE `borrow_records`
-  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `borrow_records_book_copies`
 --
 ALTER TABLE `borrow_records_book_copies`
-  MODIFY `borrow_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `borrow_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -372,7 +380,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables

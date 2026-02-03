@@ -136,6 +136,68 @@ class User extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Lấy danh sách thành viên với phân trang
+    public function getMembersWithPagination($page = 1, $limit = 10)
+    {
+        $offset = (int)(($page - 1) * $limit);
+        $limit = (int)$limit;
+
+        $stmt = $this->db->prepare(
+            "
+            SELECT *
+            FROM users
+            WHERE role = 'member'
+            ORDER BY full_name ASC
+            LIMIT " . $limit . " OFFSET " . $offset
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Lấy tổng số thành viên
+    public function getTotalMembersCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'member'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    // Tìm kiếm thành viên với phân trang
+    public function searchMembers($keyword, $page = 1, $limit = 10)
+    {
+        $offset = (int)(($page - 1) * $limit);
+        $limit = (int)$limit;
+        $searchTerm = '%' . $keyword . '%';
+
+        $sql = "
+            SELECT *
+            FROM users
+            WHERE role = 'member'
+            AND (username LIKE ? OR full_name LIKE ? OR email LIKE ?)
+            ORDER BY full_name ASC
+            LIMIT " . $limit . " OFFSET " . $offset;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Đếm tổng số thành viên khi tìm kiếm
+    public function countSearchMembers($keyword)
+    {
+        $searchTerm = '%' . $keyword . '%';
+        $sql = "
+            SELECT COUNT(*) as total
+            FROM users
+            WHERE role = 'member'
+            AND (username LIKE ? OR full_name LIKE ? OR email LIKE ?)";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
     // Hàm tạo thành viên mới (admin)
     public function createMember($data)
     {
@@ -159,13 +221,14 @@ class User extends Model
     {
         $stmt = $this->db->prepare("
             UPDATE users 
-            SET full_name = ?, email = ? 
+            SET full_name = ?, email = ?, username = ? 
             WHERE user_id = ?
         ");
 
         return $stmt->execute([
             $data['fullname'],
             $data['email'],
+            $data['username'],
             $id
         ]);
     }

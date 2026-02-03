@@ -21,6 +21,15 @@
   margin-bottom: 30px;
 }
 
+/* New style for welcome banner with background image */
+.welcome-banner-with-bg {
+  background-image: url("../images/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 5rem 0;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+}
 .welcome-title {
   font-size: 2.5rem;
   font-weight: 800;

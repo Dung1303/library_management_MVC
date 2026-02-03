@@ -42,8 +42,33 @@ class AdminController extends Controller
     public function members()
     {
         $userModel = $this->model('User');
+
+        // Lấy page từ URL, mặc định là 1
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, $page); // Đảm bảo page >= 1
+        $limit = 10; // 10 thành viên mỗi trang
+        $keyword = trim($_GET['keyword'] ?? '');
+
+        // Lấy dữ liệu dựa trên việc có từ khóa tìm kiếm hay không
+        if (!empty($keyword)) {
+            // Có tìm kiếm
+            $members = $userModel->searchMembers($keyword, $page, $limit);
+            $totalMembers = $userModel->countSearchMembers($keyword);
+        } else {
+            // Không tìm kiếm, lấy tất cả
+            $members = $userModel->getMembersWithPagination($page, $limit);
+            $totalMembers = $userModel->getTotalMembersCount();
+        }
+
+        $totalPages = ceil($totalMembers / $limit);
+
         $data = [
-            'members' => $userModel->getAllMembers()
+            'members' => $members,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalMembers' => $totalMembers,
+            'limit' => $limit,
+            'keyword' => $keyword // Truyền keyword về view
         ];
         $this->view('admin/members', $data);
     }
@@ -53,14 +78,38 @@ class AdminController extends Controller
         $userModel = $this->model('User');
 
         if ($action === 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $_POST['username'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $fullname = $_POST['fullname'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // Kiểm tra username đã tồn tại chưa
+            if ($userModel->usernameExists($username)) {
+                $_SESSION['error_message'] = 'Username already exists!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            }
+
+            // Kiểm tra email đã tồn tại chưa
+            if ($userModel->emailExists($email)) {
+                $_SESSION['error_message'] = 'Email already exists!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            }
+
             $result = $userModel->createMember([
-                'fullname' => $_POST['fullname'] ?? '',
-                'email' => $_POST['email'] ?? '',
-                'username' => $_POST['username'] ?? '',
-                'password' => $_POST['password'] ?? ''
+                'fullname' => $fullname,
+                'email' => $email,
+                'username' => $username,
+                'password' => $password
             ]);
 
             if ($result) {
+                $_SESSION['success_message'] = 'Member added successfully!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            } else {
+                $_SESSION['error_message'] = 'Failed to add member!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             }
@@ -70,6 +119,7 @@ class AdminController extends Controller
             $userId = $_POST['user_id'] ?? '';
             $fullname = $_POST['fullname'] ?? '';
             $email = $_POST['email'] ?? '';
+            $username = $_POST['username'] ?? '';
 
             if (empty($userId)) {
                 header('Location: ' . BASE_URL . '/admin/members?error=no_user_id');
@@ -78,12 +128,14 @@ class AdminController extends Controller
 
             $data = [
                 'fullname' => $fullname,
-                'email' => $email
+                'email' => $email,
+                'username' => $username
             ];
 
             $result = $userModel->updateMember($userId, $data);
 
             if ($result) {
+                $_SESSION['success_message'] = 'Member updated successfully!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             } else {
