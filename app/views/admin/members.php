@@ -5,6 +5,36 @@
 <script src="<?= BASE_URL ?>/assets/js/admin-members.js" defer></script>
 
 <div class="borrow-container">
+    <!-- Error Message -->
+    <?php if (isset($_SESSION['error_message'])): ?>
+    <div class="alert alert-danger" id="errorAlert" style="margin-bottom: 20px; padding: 15px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; color: #721c24; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <?= htmlspecialchars($_SESSION['error_message']) ?>
+        </div>
+        <button type="button" onclick="closeErrorAlert()" style="background: none; border: none; color: #721c24; font-size: 20px; cursor: pointer; padding: 0; margin-left: 15px;">
+            ×
+        </button>
+    </div>
+    <script>
+        setTimeout(function() {
+            closeErrorAlert();
+        }, 4000);
+        
+        function closeErrorAlert() {
+            const alert = document.getElementById('errorAlert');
+            if (alert) {
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 300);
+            }
+        }
+    </script>
+    <?php unset($_SESSION['error_message']); endif; ?>
+
+    <!-- Success Message -->
     <?php if (isset($_SESSION['success_message'])): ?>
     <div class="alert alert-success" id="successAlert" style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724; display: flex; justify-content: space-between; align-items: center;">
         <div>

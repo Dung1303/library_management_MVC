@@ -81,15 +81,38 @@ class AdminController extends Controller
         $userModel = $this->model('User');
 
         if ($action === 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $_POST['username'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $fullname = $_POST['fullname'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // Kiểm tra username đã tồn tại chưa
+            if ($userModel->usernameExists($username)) {
+                $_SESSION['error_message'] = 'Username already exists!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            }
+
+            // Kiểm tra email đã tồn tại chưa
+            if ($userModel->emailExists($email)) {
+                $_SESSION['error_message'] = 'Email already exists!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            }
+
             $result = $userModel->createMember([
-                'fullname' => $_POST['fullname'] ?? '',
-                'email' => $_POST['email'] ?? '',
-                'username' => $_POST['username'] ?? '',
-                'password' => $_POST['password'] ?? ''
+                'fullname' => $fullname,
+                'email' => $email,
+                'username' => $username,
+                'password' => $password
             ]);
 
             if ($result) {
                 $_SESSION['success_message'] = 'Member added successfully!';
+                header('Location: ' . BASE_URL . '/admin/members');
+                exit;
+            } else {
+                $_SESSION['error_message'] = 'Failed to add member!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             }
