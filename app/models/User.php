@@ -61,7 +61,7 @@ class User extends Model
     {
         $stmt = $this->db->prepare("SELECT user_id FROM users WHERE username = ?");
         $stmt->execute([$username]);
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -77,7 +77,7 @@ class User extends Model
             $stmt = $this->db->prepare("SELECT user_id FROM users WHERE email = ?");
             $stmt->execute([$email]);
         }
-        
+
         return $stmt->rowCount() > 0;
     }
 
@@ -89,7 +89,7 @@ class User extends Model
             SET full_name = ?, email = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$full_name, $email, $user_id]);
     }
 
@@ -109,7 +109,7 @@ class User extends Model
             SET password = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$hashed_password, $user_id]);
     }
 
@@ -141,8 +141,9 @@ class User extends Model
     {
         $offset = (int)(($page - 1) * $limit);
         $limit = (int)$limit;
-        
-        $stmt = $this->db->prepare("
+
+        $stmt = $this->db->prepare(
+            "
             SELECT *
             FROM users
             WHERE role = 'member'
@@ -161,16 +162,52 @@ class User extends Model
         return $result['total'];
     }
 
+    // Tìm kiếm thành viên với phân trang
+    public function searchMembers($keyword, $page = 1, $limit = 10)
+    {
+        $offset = (int)(($page - 1) * $limit);
+        $limit = (int)$limit;
+        $searchTerm = '%' . $keyword . '%';
+
+        $sql = "
+            SELECT *
+            FROM users
+            WHERE role = 'member'
+            AND (username LIKE ? OR full_name LIKE ? OR email LIKE ?)
+            ORDER BY full_name ASC
+            LIMIT " . $limit . " OFFSET " . $offset;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Đếm tổng số thành viên khi tìm kiếm
+    public function countSearchMembers($keyword)
+    {
+        $searchTerm = '%' . $keyword . '%';
+        $sql = "
+            SELECT COUNT(*) as total
+            FROM users
+            WHERE role = 'member'
+            AND (username LIKE ? OR full_name LIKE ? OR email LIKE ?)";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
     // Hàm tạo thành viên mới (admin)
     public function createMember($data)
     {
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
-        
+
         $stmt = $this->db->prepare("
             INSERT INTO users (username, password, full_name, email, role, status) 
             VALUES (?, ?, ?, ?, 'member', 'active')
         ");
-        
+
         return $stmt->execute([
             $data['username'] ?? $data['fullname'],
             $hashedPassword,
@@ -187,7 +224,7 @@ class User extends Model
             SET full_name = ?, email = ?, username = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([
             $data['fullname'],
             $data['email'],
@@ -204,7 +241,7 @@ class User extends Model
             SET status = ? 
             WHERE user_id = ?
         ");
-        
+
         return $stmt->execute([$newStatus, $id]);
     }
 }

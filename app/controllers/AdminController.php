@@ -51,27 +51,33 @@ class AdminController extends Controller
     public function members()
     {
         $userModel = $this->model('User');
-        
+
         // Lấy page từ URL, mặc định là 1
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, $page); // Đảm bảo page >= 1
         $limit = 10; // 10 thành viên mỗi trang
-        
-        // Lấy dữ liệu phân trang
-        $members = $userModel->getMembersWithPagination($page, $limit);
-        $totalMembers = $userModel->getTotalMembersCount();
-        $totalPages = ceil($totalMembers / $limit);
-        
-        // Đảm bảo page không vượt quá tổng số trang
-        if ($page > $totalPages && $totalPages > 0) {
-            $page = $totalPages;
+        $keyword = trim($_GET['keyword'] ?? '');
+
+        // Lấy dữ liệu dựa trên việc có từ khóa tìm kiếm hay không
+        if (!empty($keyword)) {
+            // Có tìm kiếm
+            $members = $userModel->searchMembers($keyword, $page, $limit);
+            $totalMembers = $userModel->countSearchMembers($keyword);
+        } else {
+            // Không tìm kiếm, lấy tất cả
+            $members = $userModel->getMembersWithPagination($page, $limit);
+            $totalMembers = $userModel->getTotalMembersCount();
         }
-        
+
+        $totalPages = ceil($totalMembers / $limit);
+
         $data = [
             'members' => $members,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalMembers' => $totalMembers,
-            'limit' => $limit
+            'limit' => $limit,
+            'keyword' => $keyword // Truyền keyword về view
         ];
         $this->view('admin/members', $data);
     }
@@ -123,18 +129,18 @@ class AdminController extends Controller
             $fullname = $_POST['fullname'] ?? '';
             $email = $_POST['email'] ?? '';
             $username = $_POST['username'] ?? '';
-            
+
             if (empty($userId)) {
                 header('Location: ' . BASE_URL . '/admin/members?error=no_user_id');
                 exit;
             }
-            
+
             $data = [
                 'fullname' => $fullname,
                 'email' => $email,
                 'username' => $username
             ];
-            
+
             $result = $userModel->updateMember($userId, $data);
 
             if ($result) {
@@ -159,4 +165,5 @@ class AdminController extends Controller
 
         header('Location: ' . BASE_URL . '/admin/members');
         exit;
-    }}
+    }
+}
