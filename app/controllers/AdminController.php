@@ -321,7 +321,7 @@ class AdminController extends Controller
             $status = $_POST['status'] ?? '';
 
             // Chỉ cho phép cập nhật sang các trạng thái thủ công
-            $allowed_statuses = ['available', 'damaged', 'lost'];
+            $allowed_statuses = ['available', 'borrowed', 'damaged', 'lost'];
             if ($copy_id && in_array($status, $allowed_statuses)) {
                 if ($copyModel->updateStatus($copy_id, $status)) {
                     $_SESSION['success'] = "Copy status updated successfully!";

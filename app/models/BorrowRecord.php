@@ -199,34 +199,42 @@ class BorrowRecord extends Model
         return $stmt->execute([$borrow_id, $book_copy_id]);
     }
 
-    // Trả sách
-    public function returnBook($borrow_id, $book_copy_id)
+    // Xử lý trả toàn bộ phiếu mượn
+    public function returnEntireBorrow($borrow_id)
     {
         try {
             $this->db->beginTransaction();
 
-            $this->db->prepare(
-                "UPDATE borrow_records_book_copies 
-             SET is_returned = 1 
-             WHERE borrow_id = ? AND book_copy_id = ?"
-            )->execute([$borrow_id, $book_copy_id]);
+            // 1. Lấy tất cả book_copy_id thuộc phiếu mượn này
+            $stmtCopies = $this->db->prepare(
+                "SELECT book_copy_id FROM borrow_records_book_copies WHERE borrow_id = ?"
+            );
+            $stmtCopies->execute([$borrow_id]);
+            $copyIds = $stmtCopies->fetchAll(PDO::FETCH_COLUMN);
 
-            $this->db->prepare(
-                "UPDATE book_copies 
-             SET status = 'available' 
-             WHERE book_copy_id = ?"
-            )->execute([$book_copy_id]);
+            if (!empty($copyIds)) {
+                // 2. Cập nhật status của các book_copies thành 'available'
+                $placeholders = implode(',', array_fill(0, count($copyIds), '?'));
+                $stmtUpdateCopies = $this->db->prepare(
+                    "UPDATE book_copies SET status = 'available' WHERE book_copy_id IN ($placeholders)"
+                );
+                $stmtUpdateCopies->execute($copyIds);
+            }
 
-            $this->db->prepare(
+            // 3. Cập nhật status của borrow_record thành 'returned' và set ngày trả
+            $stmtUpdateRecord = $this->db->prepare(
                 "UPDATE borrow_records 
              SET status = 'returned', return_date = NOW()
              WHERE borrow_id = ?"
-            )->execute([$borrow_id]);
+            );
+            $stmtUpdateRecord->execute([$borrow_id]);
 
             $this->db->commit();
+            return true;
         } catch (Exception $e) {
             $this->db->rollBack();
-            throw $e;
+            error_log("Return borrow error: " . $e->getMessage());
+            return false;
         }
     }
     public function searchByMemberName($keyword, $page = 1, $limit = 10)

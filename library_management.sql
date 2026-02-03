@@ -74,7 +74,7 @@ CREATE TABLE `book_copies` (
   `status` enum('available','borrowed','damaged','lost') DEFAULT 'available',
   `barcode` varchar(50) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci; 
 
 --
 -- Dumping data for table `book_copies`

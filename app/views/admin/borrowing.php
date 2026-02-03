@@ -74,59 +74,61 @@
         </thead>
         <tbody>
             <?php foreach ($borrows as $b): ?>
-            <tr class="<?= $b['status'] === 'overdue' ? 'overdue' : '' ?>">
-                <td><?= $b['borrow_id'] ?></td>
-                <td><?= htmlspecialchars($b['full_name']) ?></td>
-                <td><?= htmlspecialchars($b['titles']) ?></td>
-                <td><?= htmlspecialchars($b['barcodes']) ?></td>
-                <td><?= $b['borrow_date'] ?></td>
-                <td><?= $b['due_date'] ?></td>
-                <td>
-                    <?php if ($b['status'] === 'overdue'): ?>
-                    <span class="badge badge-danger">Overdue</span>
-                    <?php else: ?>
-                    <span class="badge badge-warning">Borrowing</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <form method="post" action="<?= BASE_URL ?>/borrow/returnBook">
-                        <input type="hidden" name="borrow_id" value="<?= $b['borrow_id'] ?>">
-                        <input type="hidden" name="book_copy_id" value="<?= $b['barcodes'] ?>">
-                        <button class="btn btn-success btn-sm">
-                            <i class="bi bi-check-circle"></i> Return
-                        </button>
-                    </form>
-                </td>
-            </tr>
+                <tr class="<?= $b['status'] === 'overdue' ? 'overdue' : '' ?>">
+                    <td><?= $b['borrow_id'] ?></td>
+                    <td><?= htmlspecialchars($b['full_name']) ?></td>
+                    <td><?= htmlspecialchars($b['titles']) ?></td>
+                    <td><?= htmlspecialchars($b['barcodes']) ?></td>
+                    <td><?= $b['borrow_date'] ?></td>
+                    <td><?= $b['due_date'] ?></td>
+                    <td>
+                        <?php if ($b['status'] === 'overdue'): ?>
+                            <span class="badge badge-danger">Overdue</span>
+                        <?php else: ?>
+                            <span class="badge badge-warning">Borrowing</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <form method="post" action="<?= BASE_URL ?>/borrow/returnBook">
+                            <input type="hidden" name="borrow_id" value="<?= $b['borrow_id'] ?>">
+                            <button class="btn btn-success btn-sm">
+                                <i class="bi bi-check-circle"></i> Return
+                            </button>
+                        </form>
+                    </td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 
     <!-- ================= PAGINATION ================= -->
     <?php if ($totalPages > 1): ?>
-    <div class="pagination">
-        <!-- Previous -->
-        <?php if ($page > 1): ?>
-            <a href="<?= BASE_URL ?>/borrow/index?page=<?= $page - 1 ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>" class="btn-page">← Previous</a>
-        <?php endif; ?>
-
-        <!-- Page Numbers -->
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <?php if ($i == $page): ?>
-                <span class="page-current"><?= $i ?></span>
-            <?php else: ?>
-                <a href="<?= BASE_URL ?>/borrow/index?page=<?= $i ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>" class="btn-page"><?= $i ?></a>
+        <div class="pagination">
+            <!-- Previous -->
+            <?php if ($page > 1): ?>
+                <a href="<?= BASE_URL ?>/borrow/index?page=<?= $page - 1 ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>"
+                    class="btn-page">← Previous</a>
             <?php endif; ?>
-        <?php endfor; ?>
 
-        <!-- Next -->
-        <?php if ($page < $totalPages): ?>
-            <a href="<?= BASE_URL ?>/borrow/index?page=<?= $page + 1 ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>" class="btn-page">Next →</a>
-        <?php endif; ?>
-    </div>
-    <div class="pagination-info">
-        Showing page <?= $page ?> of <?= $totalPages ?> (Total: <?= $total ?> records)
-    </div>
+            <!-- Page Numbers -->
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <?php if ($i == $page): ?>
+                    <span class="page-current"><?= $i ?></span>
+                <?php else: ?>
+                    <a href="<?= BASE_URL ?>/borrow/index?page=<?= $i ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>"
+                        class="btn-page"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <!-- Next -->
+            <?php if ($page < $totalPages): ?>
+                <a href="<?= BASE_URL ?>/borrow/index?page=<?= $page + 1 ?><?= !empty($keyword) ? '&keyword=' . urlencode($keyword) : '' ?>"
+                    class="btn-page">Next →</a>
+            <?php endif; ?>
+        </div>
+        <div class="pagination-info">
+            Showing page <?= $page ?> of <?= $totalPages ?> (Total: <?= $total ?> records)
+        </div>
     <?php endif; ?>
 
 </div>

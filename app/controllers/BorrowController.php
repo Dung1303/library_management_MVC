@@ -134,7 +134,9 @@ class BorrowController extends Controller
     public function returnBook()
     {
         $borrowModel = $this->model('BorrowRecord');
-        $borrowModel->returnBorrow($_POST['borrow_id']);
+        if (isset($_POST['borrow_id'])) {
+            $borrowModel->returnEntireBorrow($_POST['borrow_id']);
+        }
 
         header('Location: ' . BASE_URL . '/borrow/index');
         exit;

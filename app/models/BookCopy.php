@@ -90,4 +90,17 @@ class BookCopy extends Model
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // Lấy các bản sao có sẵn của một sách cụ thể
+    public function getAvailableByBook($book_id)
+    {
+        $sql = "SELECT bc.book_copy_id, bc.barcode, b.title 
+                FROM book_copies bc
+                JOIN books b ON bc.book_id = b.book_id
+                WHERE bc.book_id = :book_id AND bc.status = 'available'
+                ORDER BY bc.barcode ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':book_id' => $book_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
