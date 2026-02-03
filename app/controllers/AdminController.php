@@ -70,7 +70,7 @@ class AdminController extends Controller
             ]);
 
             if ($result) {
-                $_SESSION['success_message'] = 'Thêm thành viên thành công!';
+                $_SESSION['success_message'] = 'Member added successfully!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             }
@@ -96,7 +96,7 @@ class AdminController extends Controller
             $result = $userModel->updateMember($userId, $data);
 
             if ($result) {
-                $_SESSION['success_message'] = 'Cập nhật thông tin thành viên thành công!';
+                $_SESSION['success_message'] = 'Member updated successfully!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             } else {
