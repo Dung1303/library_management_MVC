@@ -96,6 +96,7 @@ class AdminController extends Controller
             $result = $userModel->updateMember($userId, $data);
 
             if ($result) {
+                $_SESSION['success_message'] = 'Cập nhật thông tin thành viên thành công!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             } else {
