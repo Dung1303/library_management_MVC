@@ -8,10 +8,32 @@
 
     <!-- Success Notification -->
     <?php if (isset($_SESSION['success_message'])): ?>
-    <div class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724;">
-        <i class="bi bi-check-circle-fill"></i>
-        <?= htmlspecialchars($_SESSION['success_message']) ?>
+    <div class="alert alert-success" id="successAlert" style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <i class="bi bi-check-circle-fill"></i>
+            <?= htmlspecialchars($_SESSION['success_message']) ?>
+        </div>
+        <button type="button" onclick="closeAlert()" style="background: none; border: none; color: #155724; font-size: 20px; cursor: pointer; padding: 0; margin-left: 15px;">
+            ×
+        </button>
     </div>
+    <script>
+        // Auto-hide alert after 4 seconds
+        setTimeout(function() {
+            closeAlert();
+        }, 4000);
+        
+        function closeAlert() {
+            const alert = document.getElementById('successAlert');
+            if (alert) {
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 300);
+            }
+        }
+    </script>
     <?php unset($_SESSION['success_message']); endif; ?>
 
     <div class="borrow-header">
