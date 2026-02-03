@@ -36,7 +36,7 @@
 
             $this->view('home/detail', [
                 'book' => $book,
-                'title' => $book['title'] . ' - Chi tiết'
+                'title' => $book['title'] . ' - Details'
             ]);
         }
     }

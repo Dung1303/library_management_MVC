@@ -310,12 +310,12 @@ class AdminController extends Controller
                     }
 
                     // Redirect về trang danh sách
-                    $_SESSION['import_result'] = "Đã nhập thành công " . $countSuccess . " cuốn sách.";
+                    $_SESSION['import_result'] = "Successfully imported " . $countSuccess . " books.";
                     $redirectUrl = $_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/books';
                     header('Location: ' . $redirectUrl);
                     exit;
                 } catch (Exception $e) {
-                    echo "Lỗi khi xử lý file: " . $e->getMessage();
+                    echo "Error processing file: " . $e->getMessage();
                 }
             }
         }

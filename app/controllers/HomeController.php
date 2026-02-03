@@ -32,7 +32,7 @@ class HomeController extends Controller
             'categories'  => $categories,
             'page'        => $page,
             'totalPages'  => $totalPages,
-            'title'       => 'Trang Chủ - Thư Viện Sách',
+            'title'       => 'Home - Library Books',
             'keyword'     => $filters['keyword'],
             'category_id' => $filters['category_id']
         ]);

@@ -42,10 +42,10 @@ class UserController extends Controller
             $email = trim($_POST['email']);
 
             if ($this->userModel->emailExists($email, $id)) {
-                $_SESSION['error'] = "Email đã tồn tại!";
+                $_SESSION['error'] = "Email already exists!";
             } else {
                 if ($this->userModel->updateProfile($id, $full_name, $email)) {
-                    $_SESSION['success'] = "Cập nhật thông tin thành công!";
+                    $_SESSION['success'] = "Profile updated successfully!";
                 }
             }
             header("Location: " . BASE_URL . "/user/profile");
@@ -65,16 +65,42 @@ class UserController extends Controller
             $user = $this->userModel->getUserById($id);
 
             if (!password_verify($current_pass, $user['password'])) {
-                $_SESSION['error'] = "Mật khẩu hiện tại không chính xác";
+                $_SESSION['error'] = "Current password is incorrect";
             } elseif ($new_pass !== $confirm_pass) {
-                $_SESSION['error'] = "Mật khẩu mới không khớp";
+                $_SESSION['error'] = "New password and confirm password do not match";
             } else {
                 $hashed = password_hash($new_pass, PASSWORD_DEFAULT);
                 $this->userModel->updatePassword($id, $hashed);
-                $_SESSION['success'] = "Đổi mật khẩu thành công!";
+                $_SESSION['success'] = "Password changed successfully!";
             }
             header("Location: " . BASE_URL . "/user/profile");
             exit;
         }
+    }
+
+    public function borrowedBooks()
+    {
+        // Kiểm tra xem user đã login hay chưa
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . BASE_URL . "/auth/login");
+            exit;
+        }
+
+        $user_id = $_SESSION['user_id'];
+
+        // Gọi BorrowRecord model
+        $borrowRecordModel = $this->model('BorrowRecord');
+
+        // Lấy sách đang mượn
+        $currentBorrows = $borrowRecordModel->getCurrentBorrowsByUser($user_id);
+
+        // Lấy lịch sử mượn (toàn bộ)
+        $borrowHistory = $borrowRecordModel->getBorrowHistoryByUser($user_id);
+        // Truyền data sang view
+        $this->view('member/borrowed_books', [
+            'currentBorrows' => $currentBorrows,
+            'borrowHistory' => $borrowHistory,
+            'title' => 'Borrowed Books & Borrow History'
+        ]);
     }
 }

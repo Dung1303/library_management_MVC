@@ -113,7 +113,7 @@
         <tbody id="membersTableBody">
             <?php if (empty($data['members'])): ?>
                 <tr>
-                    <td colspan="6" style="text-align: center;">Không tìm thấy thành viên nào.</td>
+                    <td colspan="6" style="text-align: center;">No members found.</td>
                 </tr>
             <?php endif; ?>
             <?php foreach ($data['members'] as $index => $m): ?>

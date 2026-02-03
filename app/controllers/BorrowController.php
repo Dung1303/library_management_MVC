@@ -91,13 +91,13 @@ class BorrowController extends Controller
 
             // Validate
             if (empty($userId)) {
-                die('Vui lòng chọn thành viên');
+                die('Please select a member');
             }
             if (empty($copyIds)) {
-                die('Vui lòng chọn ít nhất 1 quyển sách');
+                die('Please select at least 1 book');
             }
             if ($dueDate <= $borrowDate) {
-                die('Hạn trả không hợp lệ');
+                die('Invalid due date');
             }
 
             // Tạo phiếu mượn

@@ -38,7 +38,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <div class="container">
         <?php if (empty($books)): ?>
             <div class="empty-message">
-                <p>Không tìm thấy sách nào phù hợp.</p>
+                <p>No books found.</p>
             </div>
         <?php else: ?>
             <div class="books-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">

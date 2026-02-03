@@ -60,9 +60,9 @@
             <select name="user_id" id="memberSelect" required>
                 <option value="">-- Select Member --</option>
                 <?php foreach ($members as $m): ?>
-                <option value="<?= $m['user_id'] ?>">
-                    <?= $m['full_name'] ?> (<?= $m['email'] ?>)
-                </option>
+                    <option value="<?= $m['user_id'] ?>">
+                        <?= $m['full_name'] ?> (<?= $m['email'] ?>)
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -73,9 +73,9 @@
             <select name="book_id" id="bookSelect">
                 <option value="">-- Select Book --</option>
                 <?php foreach ($books as $b): ?>
-                <option value="<?= $b['book_id'] ?>">
-                    <?= $b['title'] ?>
-                </option>
+                    <option value="<?= $b['book_id'] ?>">
+                        <?= $b['title'] ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -112,72 +112,72 @@
     </form>
 
     <script>
-    let selectedBooks = [];
+        let selectedBooks = [];
 
-    // Load copies khi chọn book
-    document.getElementById('bookSelect')?.addEventListener('change', function() {
-        const bookId = this.value;
-        const copySelect = document.getElementById('copySelect');
+        // Load copies khi chọn book
+        document.getElementById('bookSelect')?.addEventListener('change', function() {
+            const bookId = this.value;
+            const copySelect = document.getElementById('copySelect');
 
-        if (!bookId) {
-            copySelect.innerHTML = '<option value="">-- Select Copy --</option>';
-            return;
-        }
-
-        copySelect.innerHTML = '<option value="">Loading...</option>';
-
-        fetch('<?= BASE_URL ?>/borrow/getCopies/' + bookId)
-            .then(res => res.json())
-            .then(data => {
+            if (!bookId) {
                 copySelect.innerHTML = '<option value="">-- Select Copy --</option>';
-                data.forEach(c => {
-                    copySelect.innerHTML +=
-                        `<option value="${c.book_copy_id}" data-barcode="${c.barcode}" data-title="${c.title || 'Unknown'}">${c.barcode}</option>`;
+                return;
+            }
+
+            copySelect.innerHTML = '<option value="">Loading...</option>';
+
+            fetch('<?= BASE_URL ?>/borrow/getCopies/' + bookId)
+                .then(res => res.json())
+                .then(data => {
+                    copySelect.innerHTML = '<option value="">-- Select Copy --</option>';
+                    data.forEach(c => {
+                        copySelect.innerHTML +=
+                            `<option value="${c.book_copy_id}" data-barcode="${c.barcode}" data-title="${c.title || 'Unknown'}">${c.barcode}</option>`;
+                    });
                 });
-            });
-    });
-
-    // Thêm sách vào danh sách
-    document.getElementById('addCopyBtn')?.addEventListener('click', function() {
-        const copySelect = document.getElementById('copySelect');
-        const bookSelect = document.getElementById('bookSelect');
-        const copyId = copySelect.value;
-        const barcode = copySelect.options[copySelect.selectedIndex]?.dataset.barcode || '';
-        const title = bookSelect.options[bookSelect.selectedIndex]?.text || 'Unknown';
-
-        if (!copyId) {
-            alert('Vui lòng chọn một quyển sách');
-            return;
-        }
-
-        // Kiểm tra trùng lặp
-        if (selectedBooks.some(b => b.id === copyId)) {
-            alert('Quyển sách này đã được thêm');
-            return;
-        }
-
-        selectedBooks.push({
-            id: copyId,
-            barcode: barcode,
-            title: title
         });
 
-        updateSelectedBooksDisplay();
-        copySelect.value = '';
-    });
+        // Thêm sách vào danh sách
+        document.getElementById('addCopyBtn')?.addEventListener('click', function() {
+            const copySelect = document.getElementById('copySelect');
+            const bookSelect = document.getElementById('bookSelect');
+            const copyId = copySelect.value;
+            const barcode = copySelect.options[copySelect.selectedIndex]?.dataset.barcode || '';
+            const title = bookSelect.options[bookSelect.selectedIndex]?.text || 'Unknown';
 
-    // Hiển thị danh sách sách đã chọn
-    function updateSelectedBooksDisplay() {
-        const container = document.getElementById('selectedBooks');
-        const hidden = document.getElementById('bookCopiesHidden');
+            if (!copyId) {
+                alert('Please select a book');
+                return;
+            }
 
-        if (selectedBooks.length === 0) {
-            container.innerHTML = '<p class="empty-message">No books selected yet</p>';
-            hidden.value = '';
-            return;
-        }
+            // Kiểm tra trùng lặp
+            if (selectedBooks.some(b => b.id === copyId)) {
+                alert('This book has already been added');
+                return;
+            }
 
-        container.innerHTML = selectedBooks.map((book, idx) => `
+            selectedBooks.push({
+                id: copyId,
+                barcode: barcode,
+                title: title
+            });
+
+            updateSelectedBooksDisplay();
+            copySelect.value = '';
+        });
+
+        // Hiển thị danh sách sách đã chọn
+        function updateSelectedBooksDisplay() {
+            const container = document.getElementById('selectedBooks');
+            const hidden = document.getElementById('bookCopiesHidden');
+
+            if (selectedBooks.length === 0) {
+                container.innerHTML = '<p class="empty-message">No books selected yet</p>';
+                hidden.value = '';
+                return;
+            }
+
+            container.innerHTML = selectedBooks.map((book, idx) => `
             <div class="selected-book-item">
                 <span>${book.title} (${book.barcode})</span>
                 <button type="button" class="btn-remove" onclick="removeBook(${idx})">
@@ -186,23 +186,23 @@
             </div>
         `).join('');
 
-        hidden.value = selectedBooks.map(b => b.id).join(',');
-    }
-
-    // Xóa sách khỏi danh sách
-    function removeBook(idx) {
-        selectedBooks.splice(idx, 1);
-        updateSelectedBooksDisplay();
-    }
-
-    // Validate form trước submit
-    function validateForm() {
-        if (selectedBooks.length === 0) {
-            alert('Vui lòng chọn ít nhất 1 quyển sách');
-            return false;
+            hidden.value = selectedBooks.map(b => b.id).join(',');
         }
-        return true;
-    }
+
+        // Xóa sách khỏi danh sách
+        function removeBook(idx) {
+            selectedBooks.splice(idx, 1);
+            updateSelectedBooksDisplay();
+        }
+
+        // Validate form trước submit
+        function validateForm() {
+            if (selectedBooks.length === 0) {
+                alert('Please select at least 1 book');
+                return false;
+            }
+            return true;
+        }
     </script>
 
 </div>

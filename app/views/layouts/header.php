@@ -34,13 +34,13 @@
                         <a class="nav-link active" href="<?= BASE_URL ?>">Home</a>
                     </li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link  " href="<?= BASE_URL ?>/admin/dashboard">Management</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link  " href="<?= BASE_URL ?>/admin/dashboard">Management</a>
+                        </li>
                     <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/member/borrowedBooks">Borrowed Books</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= BASE_URL ?>/user/borrowedBooks">Borrowed Books</a>
+                        </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>/user/profile">Profile</a>
@@ -49,23 +49,23 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <?php if (isset($_SESSION['user_id'])): ?>
-                    <div class="text-end">
-                        <div class="fw-semibold">
-                            <?= htmlspecialchars($_SESSION['username']); ?>
+                        <div class="text-end">
+                            <div class="fw-semibold">
+                                <?= htmlspecialchars($_SESSION['username']); ?>
+                            </div>
+                            <small class="text-muted"><?= ucfirst($_SESSION['role'] ?? 'Member'); ?></small>
                         </div>
-                        <small class="text-muted"><?= ucfirst($_SESSION['role'] ?? 'Member'); ?></small>
-                    </div>
 
-                    <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-danger btn-sm">
-                        Logout
-                    </a>
+                        <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-danger btn-sm">
+                            Logout
+                        </a>
                     <?php else: ?>
-                    <a href="<?= BASE_URL ?>/auth/login" class="btn btn-primary btn-sm">
-                        Login
-                    </a>
-                    <a href="<?= BASE_URL ?>/auth/register" class="btn btn-outline-primary btn-sm">
-                        Register
-                    </a>
+                        <a href="<?= BASE_URL ?>/auth/login" class="btn btn-primary btn-sm">
+                            Login
+                        </a>
+                        <a href="<?= BASE_URL ?>/auth/register" class="btn btn-outline-primary btn-sm">
+                            Register
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
