@@ -6,6 +6,14 @@
 
 <div class="borrow-container">
 
+    <!-- Success Notification -->
+    <?php if (isset($_SESSION['success_message'])): ?>
+    <div class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724;">
+        <i class="bi bi-check-circle-fill"></i>
+        <?= htmlspecialchars($_SESSION['success_message']) ?>
+    </div>
+    <?php unset($_SESSION['success_message']); endif; ?>
+
     <div class="borrow-header">
         <a href="<?= BASE_URL ?>/admin/index" class="btn-back">
             ← Back to Dashboard

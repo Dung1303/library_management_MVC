@@ -70,6 +70,7 @@ class AdminController extends Controller
             ]);
 
             if ($result) {
+                $_SESSION['success_message'] = 'Thêm thành viên thành công!';
                 header('Location: ' . BASE_URL . '/admin/members');
                 exit;
             }
