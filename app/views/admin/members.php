@@ -5,8 +5,6 @@
 <script src="<?= BASE_URL ?>/assets/js/admin-members.js" defer></script>
 
 <div class="borrow-container">
-
-    <!-- Success Notification -->
     <?php if (isset($_SESSION['success_message'])): ?>
     <div class="alert alert-success" id="successAlert" style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724; display: flex; justify-content: space-between; align-items: center;">
         <div>
@@ -18,7 +16,6 @@
         </button>
     </div>
     <script>
-        // Auto-hide alert after 4 seconds
         setTimeout(function() {
             closeAlert();
         }, 4000);
@@ -160,11 +157,6 @@
                 Next →
             </span>
         <?php endif; ?>
-    </div>
-
-    <!-- Pagination Info -->
-    <div style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
-        Showing page <?= $data['currentPage'] ?> of <?= $data['totalPages'] ?> | Total members: <?= $data['totalMembers'] ?>
     </div>
     <?php endif; ?>
 
