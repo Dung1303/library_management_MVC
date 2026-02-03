@@ -51,8 +51,27 @@ class AdminController extends Controller
     public function members()
     {
         $userModel = $this->model('User');
+        
+        // Lấy page từ URL, mặc định là 1
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 10; // 10 thành viên mỗi trang
+        
+        // Lấy dữ liệu phân trang
+        $members = $userModel->getMembersWithPagination($page, $limit);
+        $totalMembers = $userModel->getTotalMembersCount();
+        $totalPages = ceil($totalMembers / $limit);
+        
+        // Đảm bảo page không vượt quá tổng số trang
+        if ($page > $totalPages && $totalPages > 0) {
+            $page = $totalPages;
+        }
+        
         $data = [
-            'members' => $userModel->getAllMembers()
+            'members' => $members,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalMembers' => $totalMembers,
+            'limit' => $limit
         ];
         $this->view('admin/members', $data);
     }

@@ -103,6 +103,71 @@
         </tbody>
     </table>
 
+    <!-- Pagination -->
+    <?php if ($data['totalPages'] > 1): ?>
+    <div class="pagination" style="display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap;">
+        <!-- Previous Button -->
+        <?php if ($data['currentPage'] > 1): ?>
+            <a href="<?= BASE_URL ?>/admin/members?page=<?= $data['currentPage'] - 1 ?>" class="pagination-btn" style="padding: 8px 12px; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 5px; text-decoration: none; cursor: pointer;">
+                ← Previous
+            </a>
+        <?php else: ?>
+            <span class="pagination-btn" style="padding: 8px 12px; border: 1px solid #ccc; color: #999; border-radius: 5px; cursor: not-allowed;">
+                ← Previous
+            </span>
+        <?php endif; ?>
+
+        <!-- Page Numbers -->
+        <?php 
+        $startPage = max(1, $data['currentPage'] - 2);
+        $endPage = min($data['totalPages'], $data['currentPage'] + 2);
+        
+        if ($startPage > 1): ?>
+            <a href="<?= BASE_URL ?>/admin/members?page=1" class="pagination-btn" style="padding: 8px 12px; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 5px; text-decoration: none;">1</a>
+            <?php if ($startPage > 2): ?>
+                <span style="padding: 8px 12px; color: #666;">...</span>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+            <?php if ($i == $data['currentPage']): ?>
+                <span class="pagination-btn active" style="padding: 8px 12px; border: 1px solid #3b82f6; background-color: #3b82f6; color: white; border-radius: 5px;">
+                    <?= $i ?>
+                </span>
+            <?php else: ?>
+                <a href="<?= BASE_URL ?>/admin/members?page=<?= $i ?>" class="pagination-btn" style="padding: 8px 12px; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 5px; text-decoration: none;">
+                    <?= $i ?>
+                </a>
+            <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php if ($endPage < $data['totalPages']): ?>
+            <?php if ($endPage < $data['totalPages'] - 1): ?>
+                <span style="padding: 8px 12px; color: #666;">...</span>
+            <?php endif; ?>
+            <a href="<?= BASE_URL ?>/admin/members?page=<?= $data['totalPages'] ?>" class="pagination-btn" style="padding: 8px 12px; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 5px; text-decoration: none;">
+                <?= $data['totalPages'] ?>
+            </a>
+        <?php endif; ?>
+
+        <!-- Next Button -->
+        <?php if ($data['currentPage'] < $data['totalPages']): ?>
+            <a href="<?= BASE_URL ?>/admin/members?page=<?= $data['currentPage'] + 1 ?>" class="pagination-btn" style="padding: 8px 12px; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 5px; text-decoration: none; cursor: pointer;">
+                Next →
+            </a>
+        <?php else: ?>
+            <span class="pagination-btn" style="padding: 8px 12px; border: 1px solid #ccc; color: #999; border-radius: 5px; cursor: not-allowed;">
+                Next →
+            </span>
+        <?php endif; ?>
+    </div>
+
+    <!-- Pagination Info -->
+    <div style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
+        Showing page <?= $data['currentPage'] ?> of <?= $data['totalPages'] ?> | Total members: <?= $data['totalMembers'] ?>
+    </div>
+    <?php endif; ?>
+
 </div>
 
 <!-- ADD/EDIT FORM (POPUP) -->

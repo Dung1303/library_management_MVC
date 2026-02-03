@@ -136,6 +136,31 @@ class User extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Lấy danh sách thành viên với phân trang
+    public function getMembersWithPagination($page = 1, $limit = 10)
+    {
+        $offset = (int)(($page - 1) * $limit);
+        $limit = (int)$limit;
+        
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM users
+            WHERE role = 'member'
+            ORDER BY full_name ASC
+            LIMIT " . $limit . " OFFSET " . $offset
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Lấy tổng số thành viên
+    public function getTotalMembersCount()
+    {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'member'";
+        $result = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
     // Hàm tạo thành viên mới (admin)
     public function createMember($data)
     {
