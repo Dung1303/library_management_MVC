@@ -41,10 +41,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?= BASE_URL ?>/user/borrowedBooks">Borrowed Books</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= BASE_URL ?>/user/profile">Profile</a>
+                        </li>
                     <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/user/profile">Profile</a>
-                    </li>
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3">
