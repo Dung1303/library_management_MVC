@@ -277,6 +277,8 @@ class AdminController extends Controller
         }
         header('Location: ' . BASE_URL . '/admin/books');
     }
+    // Hàm import cần cài đặt: composer require phpoffice/phpspreadsheet
+    /*
     public function import()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['excel_file'])) {
@@ -284,7 +286,6 @@ class AdminController extends Controller
 
             if ($file && file_exists($file)) {
                 try {
-                    // Load file Excel bằng PhpSpreadsheet
                     $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
                     $sheet = $spreadsheet->getActiveSheet();
                     $rows = $sheet->toArray();
@@ -292,7 +293,6 @@ class AdminController extends Controller
                     $bookModel = $this->model('Book');
                     $countSuccess = 0;
 
-                    // Bỏ qua dòng tiêu đề , bắt đầu từ index 1
                     for ($i = 1; $i < count($rows); $i++) {
                         $row = $rows[$i];
                         $title = trim($row[0] ?? '');
@@ -309,7 +309,6 @@ class AdminController extends Controller
                         }
                     }
 
-                    // Redirect về trang danh sách
                     $_SESSION['import_result'] = "Successfully imported " . $countSuccess . " books.";
                     $redirectUrl = $_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/books';
                     header('Location: ' . $redirectUrl);
@@ -320,6 +319,7 @@ class AdminController extends Controller
             }
         }
     }
+    */
     // Giao diện chính của quản lý bản sao
     public function bookCopies()
     {
